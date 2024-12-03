@@ -1,6 +1,6 @@
 ---
 name: SonarCloud
-
+---
 "on":
   push:
     branches:
@@ -17,12 +17,11 @@ permissions: read-all
 jobs:
   SonarCloud-Scanner:
     runs-on: ubuntu-latest
-    # runs-on: ipv4-linux-64bit
     strategy:
       fail-fast: false
       matrix:
         python-version:
-          - "3.11"
+          - "3.13"
 
     steps:
       - name: checkout
@@ -38,14 +37,18 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: install dependencies
-        run: |
-          python -m pip install tox
+        run: python -m pip install tox
+        with:
+          python-version: ${{ matrix.python-version }}
 
       - name: run tox
-        run: |
-          tox -e py
+        run: tox -e py
+        with:
+          python-version: ${{ matrix.python-version }}
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
+        with:
+          python-version: ${{ matrix.python-version }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
