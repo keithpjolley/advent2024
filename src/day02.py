@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import argparse
+import os
+import sys
 
 
 def dupes(row):
@@ -38,7 +40,7 @@ def main(input_file):
         rows = [[int(col) for col in row.strip().split()] for row in f]
     # part one
     safes = sum(issafe(row) for row in rows)
-    print(f"part one: safe rows: {safes}")
+    yield safes
 
     # part two, wherein we resort to brute force and ignorance.
     safes = 0
@@ -52,11 +54,21 @@ def main(input_file):
                 if issafe(this_row):
                     safes += 1
                     break
-    print(f"part two: safe rows: {safes}")
+    yield safes
 
 
 if __name__ == "__main__":
-    p = argparse.ArgumentParser(description="Do something")
-    p.add_argument("--input", default="input.txt", help="input file")
+    me, _ = os.path.splitext(os.path.basename(__file__))
+    default_input = os.path.join("data", me + ".txt")
+    p = argparse.ArgumentParser(description="Advent of Code 2024")
+    p.add_argument(
+        "--input",
+        default=default_input,
+        help=f"input file (default: {default_input})",
+    )
     args = p.parse_args()
-    main(input_file=args.input)
+    p1, p2 = tuple(main(input_file=args.input))
+    print(f"part one: safe rows: {p1}")
+    print(f"part two: safe rows: {p2}")
+
+# vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 syntax=python

@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 import argparse
+import os
 import re
+import sys
 
 
 def main(input_file):
@@ -11,7 +13,7 @@ def main(input_file):
     # part one
     regex_0 = re.compile(r"mul\((\d{1,3}),(\d{1,3})\)")
     mults = sum(int(a) * int(b) for a, b in regex_0.findall(data))
-    print(f"part one: sum of mults: {mults}")
+    yield mults
 
     # part two.
     # Remove everything between "don't()" and "do()".
@@ -22,11 +24,22 @@ def main(input_file):
     data = regex_2.sub("X", data)
 
     mults = sum(int(a) * int(b) for a, b in regex_0.findall(data))
-    print(f"part two: sum of mults: {mults}")
+    yield mults
 
 
 if __name__ == "__main__":
-    p = argparse.ArgumentParser(description="Do something")
-    p.add_argument("--input", default="input.txt", help="input file")
+    me, _ = os.path.splitext(os.path.basename(__file__))
+    default_input = os.path.join("data", me + ".txt")
+    p = argparse.ArgumentParser(description="Advent of Code 2024")
+    p.add_argument(
+        "--input",
+        default=default_input,
+        help=f"input file (default: {default_input})",
+    )
     args = p.parse_args()
-    main(input_file=args.input)
+    p1, p2 = tuple(main(input_file=args.input))
+    print(f"part one: sum of mults: {p1}")
+    print(f"part two: sum of mults: {p2}")
+
+
+# vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 syntax=python
