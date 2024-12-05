@@ -5,6 +5,8 @@ name: SonarCloud
   push:
     branches:
       - main
+      # - day05
+      # - "**"
   pull_request:
     types:
       - opened
@@ -15,7 +17,10 @@ permissions: read-all
 
 jobs:
   SonarCloud-Scanner:
-    runs-on: ubuntu-latest
+    # This prevents a warning saying that ubuntu-latest is about to
+    # change to ubuntu-24.04.
+    # runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
@@ -37,15 +42,11 @@ jobs:
 
       - name: install dependencies
         run: python -m pip install tox
-        with:
-          python-version: ${{ matrix.python-version }}
 
       - name: run tox
         run: tox -e py
-        with:
-          python-version: ${{ matrix.python-version }}
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        uses: sonarsource/sonarqube-scan-action@v4.1.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
