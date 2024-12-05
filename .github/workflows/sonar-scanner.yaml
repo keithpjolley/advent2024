@@ -5,8 +5,8 @@ name: SonarCloud
   push:
     branches:
       - main
-      - day05
-      - "**"
+      # - day05
+      # - "**"
   pull_request:
     types:
       - opened
