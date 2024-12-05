@@ -17,7 +17,10 @@ permissions: read-all
 
 jobs:
   SonarCloud-Scanner:
-    runs-on: ubuntu-latest
+    # This prevents a warning saying that ubuntu-latest is about to
+    # change to ubuntu-24.04.
+    # runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
@@ -47,7 +50,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      # - name: SonarCloud Scan
-      #   uses: SonarSource/sonarcloud-github-action@master
-      #   env:
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
