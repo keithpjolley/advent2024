@@ -6,6 +6,7 @@ name: SonarCloud
     branches:
       - main
       - day05
+      - "**"
   pull_request:
     types:
       - opened
