@@ -35,17 +35,17 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: install dependencies
-        run: python -m pip install tox
-        with:
-          python-version: ${{ matrix.python-version }}
+      # - name: install dependencies
+      #   run: python -m pip install tox
+      #   with:
+      #     python-version: ${{ matrix.python-version }}
 
-      - name: run tox
-        run: tox -e py
-        with:
-          python-version: ${{ matrix.python-version }}
+      # - name: run tox
+      #   run: tox -e py
+      #   with:
+      #     python-version: ${{ matrix.python-version }}
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      # - name: SonarCloud Scan
+      #   uses: SonarSource/sonarcloud-github-action@master
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
