@@ -163,3 +163,4 @@ cython_debug/
 
 # Use requirements.in instead.
 requirements.txt
+*.swp
