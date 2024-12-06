@@ -65,8 +65,7 @@ def parse_args(args: list[typing.Never]) -> argparse.Namespace:
     return p.parse_args(args)
 
 
-def main() -> tuple((int, int)):
-    args = parse_args(sys.argv[1:])
+def day05(args) -> tuple((int, int)):
     with open(args.input, "r") as f:
         (rules, updates) = parse_data(f.read())
 
@@ -78,7 +77,7 @@ def main() -> tuple((int, int)):
 
 
 if __name__ == "__main__":
-    main()
+    day05(parse_args(sys.argv[1:]))
 
 
 # vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 syntax=python
