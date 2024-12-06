@@ -24,23 +24,23 @@ def part1(rules, updates) -> int:
 
 
 def part2(rules, updates) -> int:
-    befores = defaultdict(list)
-    afters = defaultdict(list)
-    for rule in rules:
-        befores[rule[0]].append(rule[1])
-        afters[rule[1]].append(rule[0])
-    broken = [
-        update
-        for update in updates
-        if not all(
-            after_page in befores[this_page]
-            for i, this_page in enumerate(update)
-            for after_page in update[i + 1 :]
-        )
-    ]
-    for update in broken:
-        new_update = update[:1]
-
+    # befores = defaultdict(list)
+    # afters = defaultdict(list)
+    # for rule in rules:
+    #    befores[rule[0]].append(rule[1])
+    #    afters[rule[1]].append(rule[0])
+    # broken = [
+    #    update
+    #    for update in updates
+    #    if not all(
+    #        after_page in befores[this_page]
+    #        for i, this_page in enumerate(update)
+    #        for after_page in update[i + 1 :]
+    #    )
+    # ]
+    # for update in broken:
+    #    new_update = update[:1]
+    #
     return 0
 
 
