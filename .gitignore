@@ -164,3 +164,5 @@ cython_debug/
 # Use requirements.in instead.
 requirements.txt
 *.swp
+righttyper.log
+righttyper.out

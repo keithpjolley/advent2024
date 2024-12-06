@@ -4,7 +4,7 @@ import argparse
 import os
 
 
-def rot45(data):
+def rot45(data: list[str]) -> list[str]:
     outer = []
     for i in range(len(data)):
         inner = []
@@ -27,11 +27,11 @@ def rot45(data):
     return outer
 
 
-def rot90(data):
+def rot90(data: list[str]) -> list[str]:
     return ["".join(x) for x in zip(*data[::-1])]
 
 
-def part1(data):
+def part1(data: list[str]) -> int:
     # Find `XMAS` in each row forwards:
     search_for = "XMAS"
     # Search forwards then backwards across rows.
@@ -52,7 +52,7 @@ def part1(data):
     return found
 
 
-def part2(data):
+def part2(data: list[str]) -> int:
     # Find 'M M'
     #      ' A '
     #      'S S'
@@ -71,7 +71,7 @@ def part2(data):
     )
 
 
-def main(input_file):
+def main(input_file: str) -> tuple((int, int)):
     with open(input_file, "r") as f:
         data = [row.rstrip("\n") for row in f]
     return (
