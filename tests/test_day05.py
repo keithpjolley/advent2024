@@ -47,13 +47,15 @@ class TestDay05(unittest.TestCase):
         self.assertTrue(args.input, "foo")
 
     def test_parse_data(self):
-        assert day.parse_data(self.test_in_0) == self.test_out_0
+        self.assertEqual(day.parse_data(self.test_in_0), self.test_out_0)
 
     def test_part1(self):
-        assert day.part1(self.test_out_0[0], self.test_out_0[1]) == 143
+        self.assertEqual(
+            day.part1(self.test_out_0[0], self.test_out_0[1]), 143
+        )
 
     def test_part2(self):
-        assert day.part2(self.test_out_0[0], self.test_out_0[1]) == 0
+        self.assertEqual(day.part2(self.test_out_0[0], self.test_out_0[1]), 0)
 
     def test_main(self):
-        assert day.day05(day.parse_args([])) == (5166, 0)
+        self.assertEqual(day.day05(day.parse_args([])), (5166, 0))
