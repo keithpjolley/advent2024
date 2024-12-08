@@ -42,9 +42,9 @@ class TestDay05(unittest.TestCase):
 
     def test_parse_args(self):
         args = day.parse_args([])
-        self.assertTrue(args.input, "data/day05.txt")
+        self.assertEqual(args.input, "data/day05.txt")
         args = day.parse_args(["--input", "foo"])
-        self.assertTrue(args.input, "foo")
+        self.assertEqual(args.input, "foo")
 
     def test_parse_data(self):
         self.assertEqual(day.parse_data(self.test_in_0), self.test_out_0)
