@@ -22,7 +22,7 @@ class TestCommon(unittest.TestCase):
 
     def test_GetRawData(self):
         # Should raise an exception if the file does not exist.
-        with self.assertRaises(FileNotFoundError) as cm:
+        with self.assertRaises(FileNotFoundError):
             common.GetRawData(["--input", "/__NON_EXISTING_FILE__"])
         raw = common.GetRawData(["--input", self.test_file])
         self.assertEqual(raw._input_file, self.test_file)

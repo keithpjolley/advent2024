@@ -2,7 +2,6 @@ import unittest
 
 import numpy as np
 
-import src.common as common
 import src.day06 as day
 
 
