@@ -1,0 +1,6 @@
+# Default reviewers for firmware.
+*       @keithpjolley
+
+# Other reviewers (teams or individuals) may be specified to override the default
+# for specific directories:
+#.github/*      @my_org/my_team
