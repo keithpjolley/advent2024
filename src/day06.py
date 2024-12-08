@@ -36,7 +36,7 @@ class day06:
 
     def _part1(self):
         row, col = self._location()
-        barriers = np.where(self._data[row][col:] == self._blockage)[0]
+        barriers = np.nonzero(self._data[row][col:] == self._blockage)[0]
         if len(barriers) == 0:
             # No barriers - go to end of row.
             self._data[row][col:] = np.full(
