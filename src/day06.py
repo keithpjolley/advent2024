@@ -115,7 +115,7 @@ class day06:
         return data
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     print(day06(sys.argv[1:]))
 
 # vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 syntax=python

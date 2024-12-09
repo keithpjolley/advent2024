@@ -34,15 +34,17 @@ class TestDay06(unittest.TestCase):
         self.assertEqual(str(the_exception), err)
 
     def test_parts(self):
-        p1, p2 = 41, 6
-        test = day.day06(self.test_input)
-        self.assertEqual(test.p2, p2)
-        self.assertEqual(
-            test.__str__(), f"Day 6: part 1: {p1}\nDay 6: part 2: {p2}"
-        )
-        # p1, p2 = 5331, 1812
-        # test = day.day06()
-        # self.assertEqual(test.p2, p2)
-        # self.assertEqual(
-        #     test.__str__(), f"Day 6: part 1: {p1}\nDay 6: part 2: {p2}"
-        # )
+        tests = [(41, 6, self.test_input)]
+        tests.append([38, 6, ["--input", "data/day06_test1.txt"]])
+        tests.append([22, 5, ["--input", "data/day06_test2.txt"]])
+        tests.append([26, 6, ["--input", "data/day06_test3.txt"]])
+        # No use using up github action minutes for this.
+        # tests.append((5331, 1812, []))
+        for p1, p2, test in tests:
+            test = day.day06(test)
+            self.assertEqual(test.p1, p1)
+            self.assertEqual(test.p2, p2)
+            # Makes sure the __str__ function is covered.
+            self.assertEqual(
+                test.__str__(), f"Day 6: part 1: {p1}\nDay 6: part 2: {p2}"
+            )

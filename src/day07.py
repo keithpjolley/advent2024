@@ -69,7 +69,7 @@ class Day:
         ]
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     print(Day(sys.argv[1:]))
 
 # vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 syntax=python

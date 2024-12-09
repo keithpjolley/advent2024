@@ -27,7 +27,7 @@ def main(input_file):
     return (distances, sums)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     me, _ = os.path.splitext(os.path.basename(__file__))
     default_input = os.path.join("data", me + ".txt")
     p = argparse.ArgumentParser(description="Advent of Code 2024")

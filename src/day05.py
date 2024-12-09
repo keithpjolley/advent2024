@@ -76,7 +76,7 @@ def day05(args) -> tuple((int, int)):
     return (p1, p2)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     day05(parse_args(sys.argv[1:]))
 
 
