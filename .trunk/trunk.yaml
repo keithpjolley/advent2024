@@ -22,7 +22,7 @@ lint:
     - taplo@0.9.3
     - bandit@1.8.0
     - black@24.10.0
-    - checkov@3.2.332
+    - checkov@3.2.334
     - git-diff-check
     - isort@5.13.2
     - markdownlint@0.43.0
