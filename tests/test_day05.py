@@ -55,7 +55,7 @@ class TestDay05(unittest.TestCase):
         )
 
     def test_part2(self):
-        self.assertEqual(day.part2(self.test_out_0[0], self.test_out_0[1]), 0)
+        self.assertEqual(day.part2(), 0)
 
     def test_main(self):
         self.assertEqual(day.day05(day.parse_args([])), (5166, 0))
