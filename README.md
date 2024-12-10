@@ -23,3 +23,5 @@
 [Day 8: Resonant Collinearity](https://adventofcode.com/2024/day/8)
 
 [Day 9: Disk Fragmenter](https://adventofcode.com/2024/day/9)
+
+[Day 10: Hoof It](https://adventofcode.com/2024/day/10)
