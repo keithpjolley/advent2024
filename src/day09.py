@@ -36,7 +36,7 @@ class Day:
         return deque(
             i // 2 if i % 2 == 0 else None
             for i, faf in enumerate(int(x) for x in self._raw_data)
-            for j in range(faf)
+            for _ in range(faf)
         )
 
     def _part1(self):
