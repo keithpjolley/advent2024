@@ -23,24 +23,8 @@ def part1(rules, updates) -> int:
     return total
 
 
-def part2(rules, updates) -> int:
-    # befores = defaultdict(list)
-    # afters = defaultdict(list)
-    # for rule in rules:
-    #    befores[rule[0]].append(rule[1])
-    #    afters[rule[1]].append(rule[0])
-    # broken = [
-    #    update
-    #    for update in updates
-    #    if not all(
-    #        after_page in befores[this_page]
-    #        for i, this_page in enumerate(update)
-    #        for after_page in update[i + 1 :]
-    #    )
-    # ]
-    # for update in broken:
-    #    new_update = update[:1]
-    #
+def part2() -> int:
+    # Not completed. :/
     return 0
 
 
@@ -70,7 +54,7 @@ def day05(args) -> tuple((int, int)):
         (rules, updates) = parse_data(f.read())
 
     p1 = part1(rules, updates)
-    p2 = part2(rules, updates)
+    p2 = part2()
     print(f"part one: {p1}")
     print(f"part two: {p2}")
     return (p1, p2)
