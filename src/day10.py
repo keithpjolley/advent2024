@@ -3,7 +3,7 @@
 from typing import TYPE_CHECKING, Never, Self
 
 if TYPE_CHECKING:
-    import networkx.classes.digraph
+    import networkx.classes.digraph  # pragma: no cover
 import os
 import sys
 

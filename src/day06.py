@@ -3,7 +3,7 @@
 from typing import TYPE_CHECKING, Any, Never, Self
 
 if TYPE_CHECKING:
-    import numpy.dtypes
+    import numpy.dtypes  # pragma: no cover
 import os
 import sys
 
@@ -39,7 +39,6 @@ class day06:
         return message
 
     def _part1(self: Self) -> int:
-        print("p1.0")
         row, col = self._location()
         barriers = np.nonzero(self._data[row][col:] == self._blockage)[0]
         if len(barriers) == 0:
@@ -58,11 +57,9 @@ class day06:
         self._data[row][col + barrier - 1] = self._current_location
         # Turn right (rotate map -90 degrees) so we are facing East.
         self._data = np.rot90(self._data, k=1)
-        print("p1.1")
         return self._part1()
 
     def _part2(self: Self) -> int:
-        print("p2.0")
         # Start from the beginning.
         data_org = self._parse_data()
         blocks = 0
@@ -74,7 +71,6 @@ class day06:
             except RecursionError:
                 # Hi! This is not elegant!
                 blocks += 1
-        print("p2.1")
         return blocks
 
     def _location(self: Self) -> "np.ndarray[Any, numpy.dtypes.Int64DType]":
