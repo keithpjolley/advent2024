@@ -1,4 +1,5 @@
 import unittest
+from typing import Self
 
 import src.common as common
 
@@ -20,7 +21,7 @@ class TestCommon(unittest.TestCase):
         " ", ""
     )
 
-    def test_GetRawData(self):
+    def test_GetRawData(self: Self) -> None:
         # Should raise an exception if the file does not exist.
         with self.assertRaises(FileNotFoundError):
             common.GetRawData(["--input", "/__NON_EXISTING_FILE__"])

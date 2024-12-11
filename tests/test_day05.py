@@ -1,4 +1,5 @@
 import unittest
+from typing import Self
 
 import src.day05 as day
 
@@ -40,22 +41,24 @@ class TestDay05(unittest.TestCase):
         ],
     )
 
-    def test_parse_args(self):
+    def test_parse_args(self: Self) -> None:
         args = day.parse_args([])
         self.assertEqual(args.input, "data/day05.txt")
         args = day.parse_args(["--input", "foo"])
         self.assertEqual(args.input, "foo")
 
-    def test_parse_data(self):
+    def test_parse_data(self: Self) -> None:
         self.assertEqual(day.parse_data(self.test_in_0), self.test_out_0)
 
-    def test_part1(self):
+    def test_part1(self: Self) -> None:
         self.assertEqual(
             day.part1(self.test_out_0[0], self.test_out_0[1]), 143
         )
 
-    def test_part2(self):
-        self.assertEqual(day.part2(), 0)
+    def test_part2(self: Self) -> None:
+        self.assertEqual(
+            day.part2(self.test_out_0[0], self.test_out_0[1]), 123
+        )
 
-    def test_main(self):
-        self.assertEqual(day.day05(day.parse_args([])), (5166, 0))
+    def test_main(self: Self) -> None:
+        self.assertEqual(day.day05(day.parse_args([])), (5166, 4679))

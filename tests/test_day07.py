@@ -1,4 +1,5 @@
 import unittest
+from typing import Self
 
 import src.day07 as day
 
@@ -23,12 +24,12 @@ class TestDay(unittest.TestCase):
         [292, [11, 6, 16, 20]],
     ]
 
-    def test_parse_data(self):
+    def test_parse_data(self: Self) -> None:
         test = day.Day(self.test_input)
         self.assertEqual(test._raw_data, self.test_raw_data)
         self.assertEqual(test._data, self.test_data)
 
-    def test_parts(self):
+    def test_parts(self: Self) -> None:
         p1, p2 = 3749, 11387
         test = day.Day(self.test_input)
         self.assertEqual(test.p2, p2)

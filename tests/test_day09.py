@@ -1,5 +1,6 @@
 import unittest
 from collections import deque
+from typing import Self
 
 import src.day09 as day
 
@@ -55,12 +56,12 @@ class TestDay(unittest.TestCase):
         ]
     )
 
-    def test_parse_data(self):
+    def test_parse_data(self: Self) -> None:
         test = day.Day(self.test_input)
         self.assertEqual(test._raw_data, self.test_raw_data)
         self.assertEqual(test._data, self.test_data)
 
-    def test_parts(self):
+    def test_parts(self: Self) -> None:
         tests = [(1928, 2858, self.test_input)]
         # No use using up github action minutes for this.
         # tests.append((6340197768906, 6363913128533, []))

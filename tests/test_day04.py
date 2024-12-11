@@ -1,3 +1,5 @@
+from typing import Self
+
 import src.day04 as day
 
 
@@ -9,7 +11,7 @@ class TestDay04:
         "".join(chr(_) for _ in range(ord("f"), ord("k"))),
     ]
 
-    def test_rot45(self):
+    def test_rot45(self: Self) -> None:
         rot45_test_data_out = [
             "0",
             "51",
@@ -22,11 +24,11 @@ class TestDay04:
         ]
         assert day.rot45(self.rot_test_data_in) == rot45_test_data_out
 
-    def test_rot90(self):
+    def test_rot90(self: Self) -> None:
         rot90_test_data_out = ["fa50", "gb61", "hc72", "id83", "je94"]
         assert day.rot90(self.rot_test_data_in) == rot90_test_data_out
 
-    def test_part2(self):
+    def test_part2(self: Self) -> None:
         # h/v
         d = [" M ", "M S", " S "]
         assert day.part2(d) == 0
@@ -66,7 +68,7 @@ class TestDay04:
         d = ["SMM", "MAS", "SSM"]
         assert day.part2(d) == 1
 
-    def test_main(self):
+    def test_main(self: Self) -> None:
         assert day.main("data/day04_test0.txt") == (4, 0)
         assert day.main("data/day04_test1.txt") == (18, 3)
         assert day.main("data/day04_test2.txt") == (0, 9)

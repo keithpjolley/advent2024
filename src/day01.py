@@ -5,7 +5,7 @@ import os
 from collections import Counter
 
 
-def main(input_file):
+def main(input_file: str) -> tuple[int, int]:
     column1 = []
     column2 = []
     with open(input_file, "r") as f:

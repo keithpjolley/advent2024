@@ -3,5 +3,5 @@
 import src.day02 as day
 
 
-def test_main():
+def test_main() -> None:
     assert tuple(day.main("data/day02.txt")) == (314, 373)

@@ -1,4 +1,5 @@
 import unittest
+from typing import Self
 
 import src.day08 as day
 
@@ -35,13 +36,13 @@ class TestDay(unittest.TestCase):
         [".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
     ]
 
-    def test_parse_data(self):
+    def test_parse_data(self: Self) -> None:
         test = day.Day(self.test_input)
         self.assertEqual(test._raw_data, self.test_raw_data)
         self.maxDiff = None
         self.assertEqual(test._data, self.test_data)
 
-    def test_parts(self):
+    def test_parts(self: Self) -> None:
         tests = [(14, 34, self.test_input)]
         # No use using up github action minutes for this.
         # tests.append((311, 1115, []))

@@ -3,9 +3,10 @@
 import argparse
 import os
 import re
+from typing import Any, Generator
 
 
-def main(input_file):
+def main(input_file: str) -> Generator[int, Any, Any]:
     with open(input_file, "r") as f:
         data = f.read().replace("\n", "X")
 

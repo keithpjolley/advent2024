@@ -4,6 +4,7 @@ import operator
 import os
 import sys
 from itertools import product
+from typing import Any, Generator, Never, Self
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -23,7 +24,7 @@ class Day:
         # '^' : operator.xor,
     }
 
-    def __init__(self, args):
+    def __init__(self: Self, args: list[Never]) -> None:
         self._get_raw = GetRawData(
             args, day=os.path.splitext(os.path.basename(__file__))[0]
         )
@@ -32,14 +33,14 @@ class Day:
         self.p1 = self._part1()
         self.p2 = self._part2()
 
-    def __str__(self):
+    def __str__(self: Self) -> str:
         """! This is what's printed if the class is printed.
         @return: The message to be printed.
         """
         message = f"part 1: {self.p1}\npart 2: {self.p2}"
         return message
 
-    def _comp_p1(self, ok_ops):
+    def _comp_p1(self: Self, ok_ops: str) -> Generator[int, Any, Any]:
         for total, values in self._data:
             values_save = values
             for operators in product(ok_ops, repeat=len(values) - 1):
@@ -52,13 +53,13 @@ class Day:
                     yield total
                     break
 
-    def _part1(self):
+    def _part1(self: Self) -> int:
         return sum(self._comp_p1("+*"))
 
-    def _part2(self):
+    def _part2(self: Self) -> int:
         return sum(self._comp_p1("+*c"))
 
-    def _parse_data(self):
+    def _parse_data(self: Self) -> list[list[int]]:
         """! Parse the input data into a numpy array.
         @param data: The input map, a string.
         @return: A tuple containing the map and the starting point.

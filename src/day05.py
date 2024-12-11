@@ -7,7 +7,7 @@ import typing
 from collections import defaultdict
 
 
-def part1(rules, updates) -> int:
+def part1(rules: list[list[int]], updates: list[list[int]]) -> int:
     befores = defaultdict(list)
     for rule in rules:
         befores[rule[0]].append(rule[1])
@@ -23,9 +23,33 @@ def part1(rules, updates) -> int:
     return total
 
 
-def part2() -> int:
-    # Not completed. :/
-    return 0
+def part2(rules: list[list[int]], updates: list[list[int]]) -> int:
+    """! Turns out the rules as a whole are not consistent.
+    For example, this sequence is impossible to satisfy:
+    12|15
+    13|12
+    15|13
+    This means we have to create sub-rules for each update.
+    """
+    befores = defaultdict(list)
+    for rule in rules:
+        befores[rule[0]].append(rule[1])
+    total = 0
+    for update in updates:
+        if all(
+            after_page in befores[this_page]
+            for i, this_page in enumerate(update)
+            for after_page in update[i + 1 :]
+        ):
+            continue
+        update_last = None
+        while update != update_last:
+            update_last = update.copy()
+            for i in range(len(update) - 1):
+                if [update[i + 1], update[i]] in rules:
+                    update[i], update[i + 1] = update[i + 1], update[i]
+        total += update[len(update) // 2]
+    return total
 
 
 def parse_data(data: str) -> tuple[list[list[int]], list[list[int]]]:
@@ -49,13 +73,12 @@ def parse_args(args: list[typing.Never]) -> argparse.Namespace:
     return p.parse_args(args)
 
 
-def day05(args) -> tuple((int, int)):
+def day05(args: argparse.Namespace) -> tuple((int, int)):
     with open(args.input, "r") as f:
         (rules, updates) = parse_data(f.read())
-
     p1 = part1(rules, updates)
-    p2 = part2()
     print(f"part one: {p1}")
+    p2 = part2(rules, updates)
     print(f"part two: {p2}")
     return (p1, p2)
 

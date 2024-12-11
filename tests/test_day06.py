@@ -1,4 +1,5 @@
 import unittest
+from typing import Self
 
 import numpy as np
 
@@ -23,7 +24,7 @@ class TestDay06(unittest.TestCase):
         ]
     )
 
-    def test_parse_data(self):
+    def test_parse_data(self: Self) -> None:
         test = day.day06(self.test_input)
         test_data = test._parse_data()
         self.assertEqual(test_data.tolist(), self.good_data_result.tolist())
@@ -33,7 +34,7 @@ class TestDay06(unittest.TestCase):
         err = "Invalid input data"
         self.assertEqual(str(the_exception), err)
 
-    def test_parts(self):
+    def test_parts(self: Self) -> None:
         tests = [(41, 6, self.test_input)]
         tests.append([38, 6, ["--input", "data/day06_test1.txt"]])
         tests.append([22, 5, ["--input", "data/day06_test2.txt"]])

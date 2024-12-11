@@ -4,6 +4,7 @@ import itertools as it
 import os
 import sys
 from collections import deque
+from typing import Never, Self
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -12,7 +13,7 @@ from src.common import GetRawData
 
 class Day:
 
-    def __init__(self, args):
+    def __init__(self: Self, args: list[Never]) -> None:
         self._get_raw = GetRawData(
             args, day=os.path.splitext(os.path.basename(__file__))[0]
         )
@@ -21,14 +22,14 @@ class Day:
         self.p1 = self._part1()
         self.p2 = self._part2()
 
-    def __str__(self):
+    def __str__(self: Self) -> str:
         """! This is what's printed if the class is printed.
         @return: The message to be printed.
         """
         message = f"part 1: {self.p1}\npart 2: {self.p2}"
         return message
 
-    def _parse_data(self):
+    def _parse_data(self: Self) -> deque:
         """! Parse the input data into a numpy array.
         @param data: The input map, a string.
         @return: A tuple containing the map and the starting point.
@@ -39,7 +40,7 @@ class Day:
             for _ in range(faf)
         )
 
-    def _part1(self):
+    def _part1(self: Self) -> int:
         data = self._data.copy()
         try:
             while i := data.index(None):
@@ -47,13 +48,13 @@ class Day:
         except (IndexError, ValueError):
             return sum(i * f for i, f in enumerate(data) if f is not None)
 
-    def _get_holes(self, data):
+    def _get_holes(self: Self, data: list[None] | list[int]) -> dict[int, int]:
         # return dict of {hole_start: hole_length, ...}
         holes = [[_, len(list(g))] for _, g in it.groupby(data)]
         hole_index = [0] + list(it.accumulate([h[1] for h in holes][:-1]))
         return {b: a[1] for a, b in zip(holes, hole_index) if a[0] is None}
 
-    def _part2(self):
+    def _part2(self: Self) -> int:
         data = list(self._data)
         for _, g in it.groupby(reversed(self._data)):
             g = list(g)

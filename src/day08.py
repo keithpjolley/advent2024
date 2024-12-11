@@ -3,6 +3,7 @@
 import os
 import sys
 from itertools import combinations
+from typing import Never, Self
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -11,7 +12,7 @@ from src.common import GetRawData
 
 class Day:
 
-    def __init__(self, args):
+    def __init__(self: Self, args: list[Never]) -> None:
         self._get_raw = GetRawData(
             args, day=os.path.splitext(os.path.basename(__file__))[0]
         )
@@ -25,14 +26,14 @@ class Day:
         self.p1 = self._part1()
         self.p2 = self._part2()
 
-    def __str__(self):
+    def __str__(self: Self) -> str:
         """! This is what's printed if the class is printed.
         @return: The message to be printed.
         """
         message = f"part 1: {self.p1}\npart 2: {self.p2}"
         return message
 
-    def _get_antennas(self):
+    def _get_antennas(self: Self) -> dict[str, list[list[int]]]:
         return {
             n: [
                 [r, c]
@@ -43,12 +44,14 @@ class Day:
             for n in self._nodes
         }
 
-    def _within_bounds(self, node):
+    def _within_bounds(self: Self, node: list[int]) -> bool:
         return all(
             (node[0] >= 0, node[1] >= 0, node[0] < self._h, node[1] < self._w)
         )
 
-    def _get_antinodes(self, a, b, part):
+    def _get_antinodes(
+        self: Self, a: list[int], b: list[int], part: int
+    ) -> list[list[int]] | set[tuple[int, int]]:
         distance = [i - j for i, j in zip(a, b)]
         if part == 1:
             return [
@@ -73,21 +76,21 @@ class Day:
                 location = [i + j for i, j in zip(location, distance)]
             return antis
 
-    def _part1(self):
+    def _part1(self: Self) -> int:
         for _n, locations in self._get_antennas().items():
             for a, b in combinations(locations, 2):
                 for anti in self._get_antinodes(a, b, 1):
                     self._antinodes[anti[0]][anti[1]] = 1
         return sum(sum(row) for row in self._antinodes)
 
-    def _part2(self):
+    def _part2(self: Self) -> int:
         for locations in self._get_antennas().values():
             for a, b in combinations(locations, 2):
                 for anti in self._get_antinodes(a, b, 2):
                     self._antinodes[anti[0]][anti[1]] = 1
         return sum(sum(row) for row in self._antinodes)
 
-    def _parse_data(self):
+    def _parse_data(self: Self) -> list[list[str]]:
         """! Parse the input data into a numpy array.
         @param data: The input map, a string.
         @return: A tuple containing the map and the starting point.

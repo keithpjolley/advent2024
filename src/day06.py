@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+from typing import TYPE_CHECKING, Any, Never, Self
+
+if TYPE_CHECKING:
+    import numpy.dtypes  # pragma: no cover
 import os
 import sys
 
@@ -17,7 +21,7 @@ class day06:
     _blockage = 2
     _current_location = 3
 
-    def __init__(self, args):
+    def __init__(self: Self, args: list[Never]) -> None:
         self._get_raw = GetRawData(
             args, day=os.path.splitext(os.path.basename(__file__))[0]
         )
@@ -27,14 +31,14 @@ class day06:
         self.p1 = self._part1()
         self.p2 = self._part2()
 
-    def __str__(self):
+    def __str__(self: Self) -> str:
         """! This is what's printed if the class is printed.
         @return: The message to be printed.
         """
         message = f"Day 6: part 1: {self.p1}\nDay 6: part 2: {self.p2}"
         return message
 
-    def _part1(self):
+    def _part1(self: Self) -> int:
         row, col = self._location()
         barriers = np.nonzero(self._data[row][col:] == self._blockage)[0]
         if len(barriers) == 0:
@@ -55,7 +59,7 @@ class day06:
         self._data = np.rot90(self._data, k=1)
         return self._part1()
 
-    def _part2(self):
+    def _part2(self: Self) -> int:
         # Start from the beginning.
         data_org = self._parse_data()
         blocks = 0
@@ -69,13 +73,13 @@ class day06:
                 blocks += 1
         return blocks
 
-    def _location(self):
+    def _location(self: Self) -> "np.ndarray[Any, numpy.dtypes.Int64DType]":
         """! Find the starting location of the guard.
         @return: The location of the guard.
         """
         return np.argwhere(self._data == self._current_location)[0]
 
-    def _parse_data(self):
+    def _parse_data(self: Self) -> "np.ndarray[Any, numpy.dtypes.Int64DType]":
         """! Parse the input data into a numpy array.
         @param data: The input map, a string.
         @return: A tuple containing the map and the starting point.
