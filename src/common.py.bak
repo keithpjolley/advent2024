@@ -1,13 +1,11 @@
+from typing import Never, Self
 import argparse
 import os
-from typing import Never, Self
 
 
 class GetRawData:
 
-    def __init__(
-        self: Self, args: list[Never] | None = None, day: str = "day00"
-    ) -> None:
+    def __init__(self: Self, args: list[Never]|None=None, day: str="day00") -> None:
         self._args = args
         self._day = day
         self._input_file = self._parse_args().input

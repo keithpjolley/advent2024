@@ -7,7 +7,7 @@ import typing
 from collections import defaultdict
 
 
-def part1(rules: list[list[int]], updates: list[list[int]]) -> int:
+def part1(rules, updates) -> int:
     befores = defaultdict(list)
     for rule in rules:
         befores[rule[0]].append(rule[1])
@@ -23,7 +23,7 @@ def part1(rules: list[list[int]], updates: list[list[int]]) -> int:
     return total
 
 
-def part2(rules: list[list[int]], updates: list[list[int]]) -> int:
+def part2(rules, updates) -> int:
     """! Turns out the rules as a whole are not consistent.
     For example, this sequence is impossible to satisfy:
     12|15
@@ -73,7 +73,7 @@ def parse_args(args: list[typing.Never]) -> argparse.Namespace:
     return p.parse_args(args)
 
 
-def day05(args: argparse.Namespace) -> tuple((int, int)):
+def day05(args) -> tuple((int, int)):
     with open(args.input, "r") as f:
         (rules, updates) = parse_data(f.read())
     p1 = part1(rules, updates)

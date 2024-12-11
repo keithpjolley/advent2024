@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
+from typing import Never, Self
 import os
 import sys
 from itertools import combinations
-from typing import Never, Self
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -49,9 +49,7 @@ class Day:
             (node[0] >= 0, node[1] >= 0, node[0] < self._h, node[1] < self._w)
         )
 
-    def _get_antinodes(
-        self: Self, a: list[int], b: list[int], part: int
-    ) -> list[list[int]] | set[tuple[int, int]]:
+    def _get_antinodes(self: Self, a: list[int], b: list[int], part: int) -> list[list[int]]|set[tuple[int, int]]:
         distance = [i - j for i, j in zip(a, b)]
         if part == 1:
             return [

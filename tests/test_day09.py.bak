@@ -1,6 +1,6 @@
+from typing import Self
 import unittest
 from collections import deque
-from typing import Self
 
 import src.day09 as day
 

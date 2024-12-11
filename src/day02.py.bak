@@ -2,10 +2,9 @@
 
 import argparse
 import os
-from typing import Any, Generator
 
 
-def dupes(row: list[int]) -> bool:
+def dupes(row):
     """! Return True if there are duplicates in the row."""
     for num in row:
         if row.count(num) > 1:
@@ -13,7 +12,7 @@ def dupes(row: list[int]) -> bool:
     return False
 
 
-def safe(row: list[int]) -> bool:
+def safe(row):
     """! Return True if the row is "safe." """
     for a, b in zip(row, row[1:]):
         # print(f"abs({a}-{b}): {abs(a-b)} ------------------")
@@ -22,7 +21,7 @@ def safe(row: list[int]) -> bool:
     return True
 
 
-def issafe(row: list[int]) -> bool:
+def issafe(row):
     if dupes(row):
         # Contains duplicates.
         # print(f"dupe: {row}")
@@ -34,7 +33,7 @@ def issafe(row: list[int]) -> bool:
     return safe(row)
 
 
-def main(input_file: str) -> Generator[int, Any, Any]:
+def main(input_file):
     safes = 0
     with open(input_file, "r") as f:
         rows = [[int(col) for col in row.strip().split()] for row in f]

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
+from typing import Any, Generator, Never, Self
 import operator
 import os
 import sys
 from itertools import product
-from typing import Any, Generator, Never, Self
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 

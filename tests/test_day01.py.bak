@@ -3,5 +3,5 @@
 import src.day01 as day
 
 
-def test_main() -> None:
+def test_main():
     assert day.main("data/day01.txt") == (1830467, 26674158)

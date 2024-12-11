@@ -1,5 +1,5 @@
-import unittest
 from typing import Self
+import unittest
 
 import src.common as common
 
