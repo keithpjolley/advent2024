@@ -35,6 +35,10 @@ lint:
         - bandit
       paths:
         - tests/**
+    - linters:
+        - ALL
+      paths:
+        - template/**
 actions:
   enabled:
     - trunk-announce
