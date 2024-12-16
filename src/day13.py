@@ -47,7 +47,7 @@ class Day:
         ]
 
     def _part1(self: Self) -> int:
-        """! Brute force and ignorance."""
+        """! Brute force and ignorance ftw."""
         total = 0
         for i, row in enumerate(self._data):
             # Won't push any more than this many times for Button A.
@@ -75,34 +75,6 @@ class Day:
         return total
 
     def _part2(self: Self) -> int:
-        def _plot():  # pragma: no cover
-            """! Left over from debugging."""
-
-            def a(x):
-                return slope_a * x
-
-            def b(x):
-                return slope_b * x
-
-            def c(x):
-                return b(x) + row.py - row.px * slope_b
-
-            def d():
-                return (row.py - row.px * slope_b) / (slope_a - slope_b)
-
-            import matplotlib.pyplot as plt
-            import numpy as np
-
-            x = np.linspace(0, 50, 1000)
-            fig, ax = plt.subplots()
-            ax.plot(x, a(x), "-b", label="a(x)")
-            ax.plot(x, b(x), "-r", label="b(x)")
-            ax.plot(x, c(x), "-g", label="c(x)")
-            ax.scatter(row.px, row.py, marker="o", color="black")
-            ax.scatter(d(), a(d()), marker="+", color="black")
-            ax.legend(loc="upper left")
-            ax.grid()
-
         total = 0
         adder = 10000000000000
         for row in self._data:
@@ -117,6 +89,7 @@ class Day:
             # Too shallow?
             if slope_a < slope_p and slope_b < slope_p:
                 continue
+            # Apparently there are no cases where the slopes.
             if slope_a != slope_b:
                 # Find where the triangles intersect. There will be one
                 # such point.
@@ -141,6 +114,7 @@ class Day:
                 # and we can't have imaginary mashes.  The number of
                 # mashes on A to get to the point have to be the same
                 # as well as from the point to the prize.
+                # Also, how cool is it to use the walrus operator?
                 if (
                     x_intercept % row.mash_ax == 0
                     and y_intercept % row.mash_ay == 0
@@ -152,7 +126,6 @@ class Day:
                     == (row.py - y_intercept) // row.mash_by
                 ):
                     total += 3 * a_mashes + b_mashes
-                continue
         return total
 
 
