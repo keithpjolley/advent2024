@@ -162,5 +162,4 @@ cython_debug/
 #.idea/
 
 *.swp
-righttyper.log
-righttyper.out
+righttyper.*

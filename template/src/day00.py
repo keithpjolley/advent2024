@@ -32,7 +32,7 @@ class Day:
         return message
 
     def _parse_data(self: Self) -> list[list[int]]:
-        return [[c for c in row] for row in self._raw_data.strip().split("\n")]
+        return self._raw_data
 
     def _part1(self: Self) -> int:
         return 0
