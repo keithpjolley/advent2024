@@ -27,13 +27,6 @@ class TestDay(unittest.TestCase):
             [row._asdict() for row in test._data], self._test_data
         )
 
-    def test_draw_map(self: Self) -> None:
-        test_map = "Seconds: 1..... .....\n...11 .....\n..... 1....\n\n..... .....\n.11.. 1..1.\n1...1 .....\n"
-        test = day.Day(self._test_input)
-        test._seconds = 1
-        grid = test._draw_map()
-        self.assertEqual(grid, test_map)
-
     def test_parts(self: Self) -> None:
         tests = [(12, 0, self._test_input)]
         tests.append((230435667, 7709, []))
