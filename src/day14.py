@@ -78,18 +78,6 @@ class Day:
         grid = [["." if r == 0 else str(r) for r in row] for row in grid]
         return grid
 
-    def _draw_map(self: Self):
-        ret = f"Seconds: {self._seconds}"
-        for j, row in enumerate(self._make_grid()):
-            if j != self._mid_height:
-                for i, r in enumerate(row):
-                    if i == self._mid_width:
-                        ret += " "
-                    else:
-                        ret += str(r) if r else "."
-            ret += "\n"
-        return ret
-
     def _part1(self: Self) -> int:
         quadrants = [0 for _ in range(4)]
         for guard in self._data:
