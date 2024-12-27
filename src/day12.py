@@ -98,10 +98,10 @@ class Day:
         plant_types = list(
             set(nx.get_node_attributes(self._graph, "plant_type").values())
         )
-        cNorm = colors.Normalize(vmin=0, vmax=len(plant_types))
-        scalarMap = cmx.ScalarMappable(norm=cNorm, cmap=plt.get_cmap("Set1"))
+        c_norm = colors.Normalize(vmin=0, vmax=len(plant_types))
+        scalar_map = cmx.ScalarMappable(norm=c_norm, cmap=plt.get_cmap("Set1"))
         node_color = {
-            node: scalarMap.to_rgba(
+            node: scalar_map.to_rgba(
                 plant_types.index(self._graph.nodes()[node]["plant_type"])
             )
             for node in self._graph.nodes()
@@ -127,6 +127,28 @@ class Day:
             )
         )
 
+    def _top_bottom(self: Self, y_min, y_max, x_min, x_max, xy_pairs):
+        sides = []
+        for dx, dy in [(0, -1), (0, +1)]:
+            for y in range(y_min, y_max + 1):
+                for x in range(x_min, x_max + 1):
+                    sides.append(
+                        (x, y) in xy_pairs and (x + dx, y + dy) not in xy_pairs
+                    )
+                sides.append(False)
+        return sides
+
+    def _left_right(self: Self, y_min, y_max, x_min, x_max, xy_pairs):
+        sides = []
+        for dx, dy in [(-1, 0), (1, 0)]:
+            for x in range(x_min, x_max + 1):
+                for y in range(y_min, y_max + 1):
+                    sides.append(
+                        (x, y) in xy_pairs and (x + dx, y + dy) not in xy_pairs
+                    )
+                sides.append(False)
+        return sides
+
     def _part2(self: Self) -> int:
         def range_of(values: ValuesView[int]) -> list[int]:
             return [min(values), max(values)]
@@ -142,25 +164,8 @@ class Day:
             x_min, x_max = range_of(x_vals)
             y_min, y_max = range_of(y_vals)
             xy_pairs = list(zip(x_vals, y_vals))
-            sides = []
-            # tops/bottoms
-            for dx, dy in [(0, -1), (0, +1)]:
-                for y in range(y_min, y_max + 1):
-                    for x in range(x_min, x_max + 1):
-                        sides.append(
-                            (x, y) in xy_pairs
-                            and (x + dx, y + dy) not in xy_pairs
-                        )
-                    sides.append(False)  # Starting a new row.
-            # lefts, rights
-            for dx, dy in [(-1, 0), (1, 0)]:
-                for x in range(x_min, x_max + 1):
-                    for y in range(y_min, y_max + 1):
-                        sides.append(
-                            (x, y) in xy_pairs
-                            and (x + dx, y + dy) not in xy_pairs
-                        )
-                    sides.append(False)
+            sides = self._top_bottom(y_min, y_max, x_min, x_max, xy_pairs)
+            sides += self._left_right(y_min, y_max, x_min, x_max, xy_pairs)
             sides = sum([k for k, _ in groupby(sides)])
             area = len(subgraph.nodes())
             total += area * sides
