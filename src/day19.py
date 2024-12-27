@@ -66,7 +66,7 @@ class Day:
         for p_len in range(1, min(self._max_len, len(design)) + 1):
             yield design[:p_len], design[p_len:]
 
-    @cache
+    @cache  # noqa B019
     def _possibles3(self: Self, design: str) -> bool:
         possibilities = int(design in self._patterns)
         for prefix, rest in self._start_finish(design):
