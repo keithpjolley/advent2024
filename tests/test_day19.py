@@ -24,8 +24,8 @@ class TestDay(unittest.TestCase):
         self.assertEqual(test._designs, self.test_designs)
 
     def test_parts(self: Self) -> None:
-        tests = [(6, 0, self.test_input)]
-        tests.append((311, 0, []))
+        tests = [(6, 16, self.test_input)]
+        tests.append((311, 616234236468263, []))
         for p1, p2, test in tests:
             test = day.Day(test)
             self.assertEqual(test.p1, p1)
