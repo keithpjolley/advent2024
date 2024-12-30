@@ -33,8 +33,10 @@ class Day:
         message = f"part 1: {self.p1}\npart 2: {self.p2}"
         return message
 
-    def _parse_data(self: Self) -> list[list[int]]:
-        maze, moves = re.split(r"\n\n", self._raw_data)
+    def _parse_data(self: Self, data=None) -> list[list[int]]:
+        if data is None:
+            data = self._raw_data
+        maze, moves = re.split(r"\n\n", data)
         maze = [
             [row[col] for col in range(1, len(row) - 1)]
             for row in maze.replace(".", "0").replace("O", "1").split("\n")
@@ -91,20 +93,29 @@ class Day:
             return
 
     def _print_maze(self: Self) -> None:
+        # 30: black
+        # 31: red
+        # 32: green
+        # 33: yellow
+        # 34: blue
+        # 35: magenta
+        # 36: cyan
+        # 37: white
         for j, row in enumerate(self._maze):
             for i, char in enumerate(row):
                 if [i, j] == self._loc:
                     fmt = f"{1};{33};{40}"
-                    print(f"\x1b[{fmt}m@\x1b[0m", end="")
                 else:
                     if char == "0":
-                        fmt = f"{0};{32};{40}"
-                        print(f"\x1b[{fmt}m.\x1b[0m", end="")
+                        fmt = "1;30"
+                        char = "."
+                    elif char == "#":
+                        fmt = "0;31"
                     else:
-                        fmt = f"{0};{35};{40}"
+                        fmt = "0;37"
                         if char == "1":
                             char = "O"
-                        print(f"\x1b[{fmt}m{char}\x1b[0m", end="")
+                print(f"\x1b[{fmt};40m{char}\x1b[0m", end="")
             if j == 0:
                 print(
                     f"  loc: {self._loc}, orientation: {self._orientation}",
@@ -142,6 +153,15 @@ class Day:
         )
 
     def _part2(self: Self) -> int:
+        print("Part 2")
+        data = (
+            self._raw_data.replace("#", "##")
+            .replace("O", "[]")
+            .replace(".", "..")
+            .replace("@", "@.")
+        )
+        self._maze, self._moves, self._loc = self._parse_data(data)
+        self._print_maze()
         return 0
 
 
