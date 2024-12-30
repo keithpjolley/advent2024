@@ -33,7 +33,9 @@ class Day:
         message = f"part 1: {self.p1}\npart 2: {self.p2}"
         return message
 
-    def _parse_data(self: Self, data: str | None = None) -> list[list[int]]:
+    def _parse_data(
+        self: Self, data: str | None = None
+    ) -> tuple[list[list[str]], str, list[int]]:
         if data is None:
             data = self._raw_data
         maze, moves = re.split(r"\n\n", data)
@@ -45,7 +47,11 @@ class Day:
         loc = [c for r in maze for c in r].index("@")
         x, y = loc % len(maze[0]), loc // len(maze[0])
         maze[y][x] = "0"
-        return maze, moves, [x, y]
+        return (
+            maze,
+            moves,
+            [x, y],
+        )
 
     def _move(self: Self) -> None:
         row = self._maze[self._loc[1]][: self._loc[0]]
