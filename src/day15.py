@@ -33,7 +33,7 @@ class Day:
         message = f"part 1: {self.p1}\npart 2: {self.p2}"
         return message
 
-    def _parse_data(self: Self, data=None) -> list[list[int]]:
+    def _parse_data(self: Self, data: str | None = None) -> list[list[int]]:
         if data is None:
             data = self._raw_data
         maze, moves = re.split(r"\n\n", data)
@@ -90,31 +90,23 @@ class Day:
             self._maze = list(reversed(self._maze))
             self._loc = [width - x, height - y]
             self._orientation += 2
-            return
 
     def _print_maze(self: Self) -> None:
-        # 30: black
-        # 31: red
-        # 32: green
-        # 33: yellow
-        # 34: blue
-        # 35: magenta
-        # 36: cyan
-        # 37: white
         for j, row in enumerate(self._maze):
             for i, char in enumerate(row):
                 if [i, j] == self._loc:
                     fmt = f"{1};{33};{40}"
+                    char = "@"
+                elif char == "0":
+                    fmt = "1;30"
+                    char = "."
+                elif char == "#":
+                    fmt = "0;31"
+                elif char == "1":
+                    char = "O"
+                    fmt = "0;37"
                 else:
-                    if char == "0":
-                        fmt = "1;30"
-                        char = "."
-                    elif char == "#":
-                        fmt = "0;31"
-                    else:
-                        fmt = "0;37"
-                        if char == "1":
-                            char = "O"
+                    fmt = "0;32"
                 print(f"\x1b[{fmt};40m{char}\x1b[0m", end="")
             if j == 0:
                 print(
