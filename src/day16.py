@@ -8,6 +8,7 @@ if TYPE_CHECKING:
 import heapq
 import os
 import sys
+from itertools import chain
 
 import networkx as nx
 
@@ -70,21 +71,6 @@ class Day:
             for k, v in dict(graph.adjacency()).items()
         }
 
-    def _draw_graph(self: Self):
-        import matplotlib.pyplot as plt
-
-        pos = {n: (d["x"], -d["y"]) for n, d in self._graph.nodes(data=True)}
-        colors = [
-            (
-                "red"
-                if n in ["S", "E"]
-                else "green" if n in self._distances else "blue"
-            )
-            for n in self._graph.nodes
-        ]
-        nx.draw(self._graph, pos, node_color=colors, labels=self._distances)
-        plt.show()
-
     def _dijkstra(self):
         # Adapted from: https://datagy.io/dijkstras-algorithm-python/
         start = "S"
@@ -135,13 +121,47 @@ class Day:
                     )
         self._distances = distances
 
+    def _draw_graph(self: Self):
+        import matplotlib.pyplot as plt
+
+        pos = {n: (d["x"], -d["y"]) for n, d in self._graph.nodes(data=True)}
+        colors = [
+            (
+                "red"
+                if n in ["S", "E"]
+                else "green" if n in self._best_seats else "blue"
+            )
+            for n in self._graph.nodes
+        ]
+        nx.draw(
+            self._graph, pos, node_color=colors
+        )  # , labels=self._distances)
+        plt.show()
+
     def _part1(self: Self) -> int:
         self._dijkstra()
-        self._draw_graph()
         return self._distances["E"]
 
     def _part2(self: Self) -> int:
-        return 0
+        attrs = {
+            (source, target): {
+                "weight": abs(
+                    self._distances[source] - self._distances[target]
+                )
+            }
+            for source, target in self._graph.edges
+        }
+        nx.set_edge_attributes(self._graph, attrs)
+        self._best_seats = set(
+            chain.from_iterable(
+                nx.all_shortest_paths(
+                    self._graph, source="S", target="E", weight="weight"
+                )
+            )
+        )
+        self._draw_graph()
+        # This doesn't work. Dijkstra only gives us one shortest path.
+        return len(self._best_seats)
 
 
 if __name__ == "__main__":  # pragma: no cover
