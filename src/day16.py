@@ -1,14 +1,32 @@
 #!/usr/bin/env python3
 
+# I struggled to figure out how to do a pure networkx solution for this
+# problem. My first iteration was to create a graph using networkx but
+# I couldn't figure out how to make it so the shortest path algo would
+# know to use the different weights for turning vs going straight. So I
+# abandoned that approach and created the graph using networkx and then
+# fed that graph into a custom dijkstra algo. Then expanded that to get
+# all shortest paths.
+
+# Then I read this solution:
+# https://github.com/fuglede/adventofcode/blob/master/2024/day16/solutions.py
+# and plagerized the heck out of it.
+
+# I'm still figuring out exactly how it works, how it has the "memory"
+# to use the different weight of turning or going straight. I have my
+# intuition that says it sort of makes four copies, or levels, of the
+# graph but I have to create some better visualizations to really grok
+# this. I think it's incredibly clever and I'm eager to learn more about
+# it. I wish I'd figured it out for myself (even though I am glad I was
+# able to brute force it on my own).
+
 from typing import TYPE_CHECKING, Never, Self
 
 if TYPE_CHECKING:
     import networkx.classes.digraph  # pragma: no cover
 
-import heapq
 import os
 import sys
-from itertools import chain
 
 import networkx as nx
 
@@ -23,7 +41,7 @@ class Day:
         self._get_raw = GetRawData(
             args, day=os.path.splitext(os.path.basename(__file__))[0]
         )
-        self._raw_data = self._get_raw.raw_data.strip()
+        self._raw_data = self._get_raw.raw_data.strip().split("\n")
         self._parse_data()
         self.p1 = self._part1()
         self.p2 = self._part2()
@@ -35,133 +53,48 @@ class Day:
         message = f"part 1: {self.p1}\npart 2: {self.p2}"
         return message
 
-    def _parse_data(self: Self):
-        graph = nx.Graph()
-        for j, row in enumerate(self._raw_data.split("\n")):
-            for i, col in enumerate(row):
-                if col != "#":
-                    if col in ["S", "E"]:
-                        graph.add_node(col, x=i, y=j)
-                    else:
-                        graph.add_node(f"{i}.{j}", x=i, y=j)
-        nodes = {(d["x"], d["y"]): n for n, d in graph.nodes(data=True)}
-        for k, v in nodes.items():
-            x, y = k
-            if (x + 1, y) in nodes:
-                graph.add_edge(v, nodes[(x + 1, y)])
-            if (x, y + 1) in nodes:
-                graph.add_edge(v, nodes[(x, y + 1)])
-        # Remove dead-end nodes. Not perfect but hopefully saves some
-        # time later on.
-        num_nodes = -1
-        while num_nodes != len(graph.nodes):
-            num_nodes = len(graph.nodes)
-            for node in list(graph.nodes):
-                if (
-                    node not in ["S", "E"]
-                    and len(neighbors := list(graph.neighbors(node))) < 2
-                ):
-                    if len(neighbors) > 0:
-                        graph.remove_edge(node, neighbors[0])
-                    graph.remove_node(node)
-        # Return adjacency list with weights all set to 1.
-        self._graph = graph
-        self._adj_list = {
-            k: {kk: 1 for kk in v.keys()}
-            for k, v in dict(graph.adjacency()).items()
-        }
+    def _parse_data(self: Self) -> None:
+        directions = (1, -1, 1j, -1j)
+        self._graph = nx.DiGraph()
+        for i, row in enumerate(self._raw_data):
+            for j, col in enumerate(row):
+                if col == "#":
+                    continue
+                point = i + 1j * j
+                if col == "S":
+                    self._start = (point, 1j)
+                if col == "E":
+                    end = point
+                for direction in directions:
+                    self._graph.add_node((point, direction))
 
-    def _dijkstra(self):
-        # Adapted from: https://datagy.io/dijkstras-algorithm-python/
-        start = "S"
-        distances = {node: float("inf") for node in self._adj_list}
-        distances[start] = 0
-
-        # Priority queue to track nodes and current shortest distance.
-        # (distance, node, direction)
-        # "direction" starts at 1, the index of E in [N, E, S, W].
-        priority_queue = [
-            (0, start, 1),
-        ]
-
-        while priority_queue:
-            # Pop the node with the smallest distance from the priority queue
-            current_distance, current_node, current_direction = heapq.heappop(
-                priority_queue
-            )
-
-            # Skip if a shorter distance to current_node is already found
-            if current_distance > distances[current_node]:
-                continue
-
-            # Explore neighbors and update distances if a shorter path is found
-            for neighbor, weight in self._adj_list[current_node].items():
-                current_x, current_y = (
-                    self._graph.nodes[current_node]["x"],
-                    self._graph.nodes[current_node]["y"],
+        for point, direction in self._graph.nodes:
+            if (point + direction, direction) in self._graph.nodes:
+                # weight 1 to go straight
+                self._graph.add_edge(
+                    (point, direction),
+                    (point + direction, direction),
+                    weight=1,
                 )
-                neighbor_x, neighbor_y = (
-                    self._graph.nodes[neighbor]["x"],
-                    self._graph.nodes[neighbor]["y"],
+            for turn in -1j, 1j:
+                # weight 1000 to turn
+                self._graph.add_edge(
+                    (point, direction), (point, direction * turn), weight=1000
                 )
-                direction = [
-                    current_y < neighbor_y,
-                    current_x < neighbor_x,
-                    current_y > neighbor_y,
-                    current_x > neighbor_x,
-                ].index(True)
-                weight = 1 if direction == current_direction else 1001
-                distance = current_distance + weight
 
-                # If shorter path to neighbor is found, update distance and push to queue
-                if distance < distances[neighbor]:
-                    distances[neighbor] = distance
-                    heapq.heappush(
-                        priority_queue, (distance, neighbor, direction)
-                    )
-        self._distances = distances
-
-    def _draw_graph(self: Self):
-        import matplotlib.pyplot as plt
-
-        pos = {n: (d["x"], -d["y"]) for n, d in self._graph.nodes(data=True)}
-        colors = [
-            (
-                "red"
-                if n in ["S", "E"]
-                else "green" if n in self._best_seats else "blue"
-            )
-            for n in self._graph.nodes
-        ]
-        nx.draw(
-            self._graph, pos, node_color=colors
-        )  # , labels=self._distances)
-        plt.show()
+        for direction in directions:
+            self._graph.add_edge((end, direction), "E", weight=0)
 
     def _part1(self: Self) -> int:
-        self._dijkstra()
-        return self._distances["E"]
+        return nx.shortest_path_length(
+            self._graph, self._start, "E", weight="weight"
+        )
 
     def _part2(self: Self) -> int:
-        attrs = {
-            (source, target): {
-                "weight": abs(
-                    self._distances[source] - self._distances[target]
-                )
-            }
-            for source, target in self._graph.edges
-        }
-        nx.set_edge_attributes(self._graph, attrs)
-        self._best_seats = set(
-            chain.from_iterable(
-                nx.all_shortest_paths(
-                    self._graph, source="S", target="E", weight="weight"
-                )
-            )
+        asps = nx.all_shortest_paths(
+            self._graph, self._start, "E", weight="weight"
         )
-        self._draw_graph()
-        # This doesn't work. Dijkstra only gives us one shortest path.
-        return len(self._best_seats)
+        return len({node for asp in asps for node, _ in asp[:-1]})
 
 
 if __name__ == "__main__":  # pragma: no cover
