@@ -63,21 +63,21 @@ class Day:
                 point = i + 1j * j
                 if col == "S":
                     self._start = (point, 1j)
-                if col == "E":
+                elif col == "E":
                     end = point
                 for direction in directions:
                     self._graph.add_node((point, direction))
 
         for point, direction in self._graph.nodes:
             if (point + direction, direction) in self._graph.nodes:
-                # weight 1 to go straight
+                # weight 1 to go straight.
                 self._graph.add_edge(
                     (point, direction),
                     (point + direction, direction),
                     weight=1,
                 )
             for turn in -1j, 1j:
-                # weight 1000 to turn
+                # weight 1000 to turn.
                 self._graph.add_edge(
                     (point, direction), (point, direction * turn), weight=1000
                 )
