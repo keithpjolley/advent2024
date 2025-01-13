@@ -1,15 +1,12 @@
 #!/usr/bin/env python3
 
-from typing import TYPE_CHECKING, Never, Self, ValuesView
+from typing import TYPE_CHECKING, Never, Self
 
 if TYPE_CHECKING:
-    import networkx.classes.digraph  # pragma: no cover
+    pass  # pragma: no cover
 
-import operator
 import os
 import sys
-import warnings
-from itertools import batched
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -19,13 +16,12 @@ from src.common import GetRawData
 class Operands:
 
     def __init__(self: Self, a: int, b: int, c: int, program) -> None:
-        self._output = []
         self._A = a
         self._B = b
         self._C = c
-        self._program = program
-        for reg, op in batched(self._program, n=2):
-            self._exec(reg, op)
+        self.program = program
+        self.output = []
+        self._exec()
 
     def __str__(self: Self) -> str:
         """! This is what's printed if the class is printed.
@@ -36,67 +32,50 @@ class Operands:
                 f"Register A: {self._A}",
                 f"Register B: {self._B}",
                 f"Register C: {self._C}",
-                f"Program: {self._program}",
-                f"Output: {','.join(map(str, self._output))}",
+                f"Program: {self.program}",
+                f"Output: {','.join(map(str, self.output))}",
             )
         )
 
-    def _exec(self: Self, instruction: int, operand: int) -> int:
-        if operand == 4:
-            combo = self._A
-        elif operand == 5:
-            combo = self._B
-        elif operand == 6:
-            combo = self._C
-        else:
-            if operand < 0 or operand > 6:
-                warnings.warn(f"Invalid operand: '{operand}'", SyntaxWarning)
-            combo = operand
+    def _exec(self: Self) -> int:
 
-        match instruction:
-            case 0:
-                self._adv(combo)
-            case 1:
-                self._bxl(combo)
-            case 2:
-                self._bst(combo)
-            case 3:
-                combo = self._jnz(combo)
-            case 4:
-                self._bxc()
-            case 5:
-                self._out(combo)
-            case 6:
-                self._bdv(combo)
-            case 7:
-                self._cdv(combo)
+        index = 0
 
-    def _adv(self, operand: int) -> int:
-        self._A = int(self._A / 2**operand)
+        while True:
 
-    def _bxl(self, operand: int) -> int:
-        self._B = operator.xor(self._B, operand)
+            try:
+                instruction, operand = (
+                    self.program[index],
+                    self.program[index + 1],
+                )
+            except IndexError:
+                return
 
-    def _bst(self, operand: int) -> int:
-        self._B = operand % 8
+            try:
+                combo = [0, 1, 2, 3, self._A, self._B, self._C][operand]
+            except IndexError:
+                combo = operand
 
-    def _jnz(self, operand: int) -> int:
-        if self._A == 0:
-            return
-        if operand != 3:
-            self._exec(operand, operand)
+            match instruction:
+                case 0:
+                    self._A >>= combo
+                case 1:
+                    self._B ^= combo
+                case 2:
+                    self._B = combo % 8
+                case 3:
+                    if self._A:
+                        index = operand - 2
+                case 4:
+                    self._B ^= self._C
+                case 5:
+                    self.output.append(combo % 8)
+                case 6:
+                    self._B = self._A >> combo
+                case 7:
+                    self._C = self._A >> combo
 
-    def _bxc(self) -> int:
-        self._B = operator.xor(self._B, self._C)
-
-    def _out(self, operand: int) -> int:
-        self._output.append(operand % 8)
-
-    def _bdv(self, operand: int) -> int:
-        self._B = int(self._A / self._combo(operand))
-
-    def _cdv(self, operand: int) -> int:
-        self._C = int(self._A / self._combo(operand))
+            index += 2
 
 
 class Day:
@@ -137,13 +116,20 @@ class Day:
                 c = int(value)
             elif input_type == "Program":
                 program = [int(i) for i in value.split(",")]
-        self._operands = Operands(a, b, c, program)
+        self.operands = Operands(a, b, c, program)
 
     def _part1(self: Self) -> int:
-        return 0
+        return ",".join(str(i) for i in self.operands.output)
 
     def _part2(self: Self) -> int:
-        return 0
+        # Solve from the tail end of the program to the front, 3 bits at a time.
+        program = self.operands.program
+        reg_a = 0
+        for i in reversed(range(len(program))):
+            reg_a <<= 3
+            while Operands(reg_a, 0, 0, program).output != program[i:]:
+                reg_a += 1
+        return reg_a
 
 
 if __name__ == "__main__":  # pragma: no cover
