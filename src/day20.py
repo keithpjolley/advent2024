@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import TYPE_CHECKING, Never, Self, ValuesView
+from typing import TYPE_CHECKING, Never, Self
 
 if TYPE_CHECKING:
     import networkx.classes.digraph  # pragma: no cover
@@ -13,7 +13,6 @@ import networkx as nx
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from collections import defaultdict
 
 from src.common import GetRawData
 
@@ -36,7 +35,7 @@ class Day:
             for n, v in self._graph.nodes(data=True)
             if v["node_type"] == "end"
         ][0]
-        # self.p1 = self._part1()
+        self.p1 = self._part1()
         self.p2 = self._part2()
 
     def __str__(self: Self) -> str:
@@ -57,9 +56,10 @@ class Day:
         if graph is None:
             graph = self._graph
         try:
-            shortest_path = nx.shortest_path(graph, self._start, self._end)
+            for n in nx.shortest_path(graph, self._start, self._end):
+                graph.nodes[n]["color"] = "g"
         except (AttributeError, nx.NetworkXNoPath):
-            shortest_path = []
+            pass
         colors = [v["color"] for _, v in graph.nodes(data=True)]
         positions = {n: (n[0], -n[1]) for n in graph.nodes()}
         nx.draw(
@@ -115,7 +115,7 @@ class Day:
                         graph.add_edge((col, row), (col + j[0], row + j[1]))
                         graph.add_edge((col, row), (col - j[0], row - j[1]))
                         if (
-                            s := spl_nocheats
+                            spl_nocheats
                             - nx.shortest_path_length(
                                 graph, self._start, self._end
                             )
