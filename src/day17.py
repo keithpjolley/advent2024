@@ -15,7 +15,9 @@ from src.common import GetRawData
 
 class Operands:
 
-    def __init__(self: Self, a: int, b: int, c: int, program) -> None:
+    def __init__(
+        self: Self, a: int, b: int, c: int, program: list[int]
+    ) -> None:
         self._A = a
         self._B = b
         self._C = c
