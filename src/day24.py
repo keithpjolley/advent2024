@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import TYPE_CHECKING, Never, Self, ValuesView
+from typing import TYPE_CHECKING, Never, Self
 
 if TYPE_CHECKING:
     import networkx.classes.digraph  # pragma: no cover

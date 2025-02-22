@@ -55,3 +55,14 @@
 [Day 24: Crossed Wires](https://adventofcode.com/2024/day/24)
 
 [Day 25: Code Chronicle](https://adventofcode.com/2024/day/25)
+
+---
+
+## Note to self
+
+I can never remember how to do run `righttyper`.
+
+```bash
+for i in tests/test_*.py;do echo $i;python3 -m righttyper --output-files --overwrite -m pytest $i;done
+rm **/righttype*
+```
