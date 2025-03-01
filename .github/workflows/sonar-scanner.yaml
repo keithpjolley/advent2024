@@ -18,20 +18,25 @@ jobs:
         python-version:
           - "3.13"
         poetry-version:
-          - "1.8.4"
+          - 1.8.4
         os:
           - ubuntu-24.04
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Install python
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Run image
-        uses: abatilo/actions-poetry@v3
+      - name: Install poetry
+        uses: abatilo/actions-poetry@v4
         with:
           poetry-version: ${{ matrix.poetry-version }}
-      - name: run tox
+      - name: Setup a local virtual environment (if no poetry.toml file)
+        run: |
+          poetry config virtualenvs.create true --local
+          poetry config virtualenvs.in-project true --local
+      - name: Run tox
         run: poetry run tox
       - name: SonarCloud Scan
         uses: sonarsource/sonarqube-scan-action@v4.1.0
