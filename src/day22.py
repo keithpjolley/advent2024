@@ -17,7 +17,7 @@ class Day:
             args, day=os.path.splitext(os.path.basename(__file__))[0]
         )
         self._data = [int(d) for d in self._get_raw.raw_data.strip().split()]
-        # self.p1 = self._part1()
+        # self.p1 #Not_Code# = self._part1()
         self.p1 = -1
         self.p2 = self._part2()
 

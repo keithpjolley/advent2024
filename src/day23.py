@@ -49,7 +49,7 @@ class Day:
             ]
         )
 
-    def _part2(self: Self) -> int:
+    def _part2(self: Self) -> str:
         return ",".join(
             sorted(
                 sorted(
