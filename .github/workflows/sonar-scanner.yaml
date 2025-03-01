@@ -24,6 +24,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+        fetch-depth: 0
       - name: Install python
         uses: actions/setup-python@v5
         with:
