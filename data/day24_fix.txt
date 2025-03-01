@@ -138,7 +138,9 @@ cpq XOR tkb -> z23
 bsr OR njd -> cpq
 rqp XOR hcd -> z10
 ckt XOR jwg -> z20
-x19 AND y19 -> z19
+# swap z19 and sbg
+# x19 AND y19 -> z19
+x19 AND y19 -> sbg
 y37 AND x37 -> gqf
 hqv XOR bcf -> z34
 x41 XOR y41 -> mfp
@@ -167,11 +169,15 @@ y34 AND x34 -> gbk
 y33 XOR x33 -> jkm
 y08 AND x08 -> wvw
 y39 XOR x39 -> fkg
-hhp XOR tjm -> dsd
+# swap dsd and z37
+# hhp XOR tjm -> dsd
+hhp XOR tjm -> z37
 cwc OR gbk -> dgv
 dnd XOR nqd -> z16
 dts XOR gpv -> z07
-njf XOR jsb -> djg
+# swap djg and z12
+# njf XOR jsb -> djg
+njf XOR jsb -> z12
 y36 AND x36 -> hjs
 y31 XOR x31 -> qvw
 stm OR mgr -> cpv
@@ -179,7 +185,9 @@ y02 AND x02 -> kwm
 x03 AND y03 -> jmr
 wcc OR jjp -> fqp
 btd XOR scj -> z43
-y24 AND x24 -> hjm
+# swap hjm and mcq
+# y24 AND x24 -> hjm
+y24 AND x24 -> mcq
 y32 XOR x32 -> pgs
 y12 XOR x12 -> jsb
 y23 XOR x23 -> tkb
@@ -213,21 +221,26 @@ mcq OR rpj -> sqr
 dsd XOR spf -> z38
 mfp AND rnc -> fbf
 dgh OR vpj -> z45
-jsb AND njf -> z12
+# swap djg and z12
+# jsb AND njf -> z12
+jsb AND njf -> djg
 kgp OR kmb -> rkn
 dmn XOR rkw -> z30
 csm OR gvt -> cgt
 y03 XOR x03 -> fbk
 y05 XOR x05 -> kdm
 hhp AND tjm -> spj
-qjc XOR kbs -> sbg
+# swap z19 and sbg
+# qjc XOR kbs -> sbg
+qjc XOR kbs -> z19
 rqp AND hcd -> sqt
 x01 XOR y01 -> rvb
 y30 XOR x30 -> rkw
 wqw XOR mtm -> z08
 y08 XOR x08 -> wqw
 mrf OR pgc -> kvh
-x24 XOR y24 -> mcq
+# swap hjm and mcq
+x24 XOR y24 -> hjm
 jpc OR vsk -> hqv
 hww AND fkc -> dcc
 dhb AND ktv -> pks
@@ -303,7 +316,9 @@ rkn AND ssq -> vsc
 ktt AND rvb -> kmb
 x10 XOR y10 -> hcd
 pmb XOR trw -> z09
-spj OR gqf -> z37
+# swap dsd and z37
+# spj OR gqf -> z37
+spj OR gqf -> dsd
 y30 AND x30 -> bfn
 x26 AND y26 -> jjp
 jrr XOR hjm -> z24
