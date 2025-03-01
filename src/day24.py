@@ -8,7 +8,9 @@ if TYPE_CHECKING:
 import os
 import re
 import sys
+import tempfile
 
+# Leave in as reminder to future self.
 # import dagviz
 # import pygraphviz as pgv
 
@@ -186,11 +188,12 @@ class Day:
         agraph.node_attr["style"] = "filled"
         for node in agraph.nodes():
             node.attr["fillcolor"] = graph.nodes[node.get_name()].get("color")
-        pdf_out = "/tmp/f.pdf"
-        print("Rendering")
-        agraph.draw(pdf_out, format="pdf", prog="dot")
-        # print(f"Opening {pdf_out}")
-        # os.system(f"open {pdf_out}")
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            pdf_out = tmpdirname + "/f.pdf"
+            print("Rendering")
+            agraph.draw(pdf_out, format="pdf", prog="dot")
+            # print(f"Opening {pdf_out}")
+        #     os.system(f"open {pdf_out}")
 
         return graph
 

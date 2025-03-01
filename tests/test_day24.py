@@ -1,8 +1,6 @@
 import unittest
 from typing import Self
 
-import networkx as nx
-
 import src.day24 as day
 
 
