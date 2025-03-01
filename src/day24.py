@@ -117,7 +117,7 @@ class Day:
             ]
         )
 
-    def _draw(self: Self) -> None:
+    def _draw(self: Self) -> None:  # pragma: no cover
         print("Drawing")
         graph = self._graph
         re_digits = re.compile(r"\d{2}")
@@ -203,7 +203,8 @@ class Day:
         # someday I'll come back and clean it up. On the plus side I
         # am happy with the graph - both in terms of its usefulness
         # but also speediness in creating it.
-        self._draw()
+        # Commented out for testing.
+        # self._draw()
         return ",".join(
             sorted(
                 set(("djg", "z12", "dsd", "z37", "hjm", "mcq", "z19", "sbg"))
