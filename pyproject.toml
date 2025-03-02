@@ -1,0 +1,39 @@
+[tool.poetry]
+description = "Advent of Code 2024"
+authors = ["Keith Jolley <keithpjolley@proton.me>"]
+readme = "README.md"
+maintainers = ["Keith Jolley <keithpjolley@proton.me>"]
+classifiers = [
+  # Specify the Python versions you support here. In particular, ensure
+  # that you indicate whether you support Python 2, Python 3 or both.
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.10",
+]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = ">=3.10,<4.0"
+numpy = "~2.2"
+networkx = "~3.4"
+matplotlib = "~3.10"
+# pygraphviz = "~1.14" # github actions doesn't like this.
+
+[tool.poetry.group.dev.dependencies]
+anyio = "~4.8"
+coverage = "~7.6"
+pytest = "~8.3"
+pytest-sugar = "~1.0"
+tox = "~4.24"
+
+[tool.poetry.extras]
+dev_tools = ["tox"]
+
+# Can't see that there's a better way than this.
+[tool.coverage.run]
+command_line = "--append"
+
+[tool.coverage.xml]
+output = "coverage.xml"

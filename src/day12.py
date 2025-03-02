@@ -127,7 +127,14 @@ class Day:
             )
         )
 
-    def _top_bottom(self: Self, y_min, y_max, x_min, x_max, xy_pairs):
+    def _top_bottom(
+        self: Self,
+        y_min: int,
+        y_max: int,
+        x_min: int,
+        x_max: int,
+        xy_pairs: list[tuple[int, int]],
+    ) -> list[bool]:
         sides = []
         for dx, dy in [(0, -1), (0, +1)]:
             for y in range(y_min, y_max + 1):
@@ -138,7 +145,14 @@ class Day:
                 sides.append(False)
         return sides
 
-    def _left_right(self: Self, y_min, y_max, x_min, x_max, xy_pairs):
+    def _left_right(
+        self: Self,
+        y_min: int,
+        y_max: int,
+        x_min: int,
+        x_max: int,
+        xy_pairs: list[tuple[int, int]],
+    ) -> list[bool]:
         sides = []
         for dx, dy in [(-1, 0), (1, 0)]:
             for x in range(x_min, x_max + 1):

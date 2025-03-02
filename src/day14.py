@@ -54,12 +54,16 @@ class Day:
             for row in self._raw_data.splitlines()
         ]
 
-    def _get_location(self, guard):
+    def _get_location(
+        self: Self, guard: namedtuple("row", "px, py, vx, vy")
+    ) -> tuple[int, int]:
         x = (guard.px + (self._seconds * guard.vx)) % self._width
         y = (guard.py + (self._seconds * guard.vy)) % self._height
         return (x, y)
 
-    def _get_quadrant(self, guard):
+    def _get_quadrant(
+        self: Self, guard: namedtuple("row", "px, py, vx, vy")
+    ) -> int:
         x, y = self._get_location(guard)
         if x < self._mid_width and y < self._mid_height:
             return 0
@@ -70,7 +74,7 @@ class Day:
         if x > self._mid_width and y > self._mid_height:
             return 3
 
-    def _make_grid(self):
+    def _make_grid(self: Self) -> list[list[str]]:
         grid = [[0 for _ in range(self._width)] for _ in range(self._height)]
         for guard in self._data:
             x, y = self._get_location(guard)
