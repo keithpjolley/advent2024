@@ -39,7 +39,7 @@ class Operands:
             )
         )
 
-    def _exec(self: Self) -> int:
+    def _exec(self: Self) -> None:
 
         index = 0
 
@@ -120,7 +120,7 @@ class Day:
                 program = [int(i) for i in value.split(",")]
         self.operands = Operands(a, b, c, program)
 
-    def _part1(self: Self) -> int:
+    def _part1(self: Self) -> str:
         return ",".join(str(i) for i in self.operands.output)
 
     def _part2(self: Self) -> int:
