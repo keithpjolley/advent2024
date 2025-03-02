@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
 
-from typing import TYPE_CHECKING, Never, Self, ValuesView
-
-if TYPE_CHECKING:
-    import networkx.classes.digraph  # pragma: no cover
-
 import os
 import sys
 from itertools import product
+from typing import Never, Self
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -57,7 +53,7 @@ class Day:
 
     def _part1(self: Self) -> int:
         return sum(
-            all(k + l <= max_kl for k, l in zip(key, lock))
+            all(_k + _l <= max_kl for _k, _l in zip(key, lock))
             for (key, max_kl), (lock, max_ll) in product(
                 self._keys, self._locks
             )
