@@ -36,7 +36,9 @@ class Day:
         message = f"part 1: {self.p1}\npart 2: {self.p2}"
         return message
 
-    def _parse_data(self: Self) -> tuple[list[list[str]], str, list[int]]:
+    def _parse_data(
+        self: Self
+    ) -> tuple[list[list[str]], str, list[int]]:
         data = self._raw_data
         maze, moves = re.split(r"\n\n", data)
         if self._in_p2:
@@ -56,9 +58,7 @@ class Day:
             maze = list(map(list, zip(*reversed(maze))))[1:-1]
             maze = list(map(list, reversed(list(zip(*maze)))))
 
-        moves = re.sub(
-            r"[^" + "".join(self.VALID_MOVES.keys()) + r"]", "", moves
-        )
+        moves = re.sub(r"[^" + "".join(self.VALID_MOVES.keys()) + r"]", "", moves)
         loc = [c for r in maze for c in r].index("@")
         x, y = loc % len(maze[0]), loc // len(maze[0])
         # Replace the robot "@" with an empty space "0" to start.
@@ -98,7 +98,7 @@ class Day:
         self._loc[0] -= 1
 
     def _p2rotate(self: Self, rotation: int) -> None:
-        def swapper(*swaps: tuple[str, str]) -> None:
+        def swapper(*swaps):
             # Swap old_x for new_x
             ret_swaps = (("u", "⇈"), ("l", "⇇"), ("d", "⇊"), ("r", "⇉"))
             for ov, nv in swaps + ret_swaps:
@@ -181,9 +181,7 @@ class Day:
     def _part1(self: Self) -> int:
         last_move = "<"
         for move in self._moves:
-            self._rotate(
-                -90 * (self.VALID_MOVES[move] - self.VALID_MOVES[last_move])
-            )
+            self._rotate(-90 * (self.VALID_MOVES[move] - self.VALID_MOVES[last_move]))
             self._move()
             last_move = move
         # Return the maze to the upright and locked position.
@@ -208,9 +206,7 @@ class Day:
         print()
 
         for move in self._moves:
-            self._rotate(
-                -90 * (self.VALID_MOVES[move] - self.VALID_MOVES[last_move])
-            )
+            self._rotate(-90 * (self.VALID_MOVES[move] - self.VALID_MOVES[last_move]))
             # self._move2()
             last_move = move
         while (self._orientation % 4) != 0:
@@ -248,7 +244,7 @@ class Day:
         if "0" not in row:
             # No empty space to move to.
             return
-        first_space = len(row) - row[::-1].index("0") - 1
+        first_space = len(row) - row[::-1].index('0') - 1
         # This only works if any boxes in row are only in this row,
         # that is, only "⇉" or "⇇".
         self._maze[self._loc[1]].pop(self._loc[0] - len(row) + first_space)

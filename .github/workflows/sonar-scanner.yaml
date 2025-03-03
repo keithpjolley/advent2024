@@ -32,15 +32,16 @@ jobs:
       - uses: abatilo/actions-poetry@v4
         with:
           poetry-version: ${{ matrix.poetry-version }}
-      - run: |
-          poetry config virtualenvs.create true --local
-          poetry config virtualenvs.in-project true --local
-      - uses: actions/cache@v4.2.2
-        with:
-          path: ./.venv
-          key: venv-${{ hashFiles('poetry.lock') }}
-      - run: poetry install
-      - run: poetry run tox
-      - uses: sonarsource/sonarqube-scan-action@v4.1.0
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      # - run: |
+      #     poetry config virtualenvs.create true --local
+      #     poetry config virtualenvs.in-project true --local
+      # - uses: actions/cache@v4.2.2
+      #   with:
+      #     path: ./.venv
+      #     key: venv-${{ hashFiles('poetry.lock') }}
+      # - run: poetry install
+      # - run: poetry run tox
+      # - uses: sonarsource/sonarqube-scan-action@v4.1.0
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

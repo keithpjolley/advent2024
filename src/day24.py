@@ -118,6 +118,10 @@ class Day:
         )
 
     def _draw(self: Self) -> None:  # pragma: no cover
+        """! This is a helper function to draw the graph.
+        Sonar complains about it being too complex.
+        That's fine.
+        """
         print("Drawing")
         graph = self._graph
         re_digits = re.compile(r"\d{2}")
