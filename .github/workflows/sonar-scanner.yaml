@@ -40,8 +40,8 @@ jobs:
         with:
           path: ./.venv
           key: venv-${{ hashFiles('poetry.lock') }}
-      # - run: poetry install
-      # - run: poetry run tox
+      - run: poetry install
+      - run: poetry run tox
       # - uses: sonarsource/sonarqube-scan-action@v4.1.0
       #   env:
       #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
