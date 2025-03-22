@@ -23,13 +23,13 @@ lint:
     - taplo@0.9.3
     - bandit@1.8.3
     - black@25.1.0
-    - checkov@3.2.372
+    - checkov@3.2.382
     - git-diff-check
-    - isort@6.0.0
+    - isort@6.0.1
     - markdownlint@0.44.0
-    - prettier@3.5.1
-    - ruff@0.9.7
-    - trufflehog@3.88.12
+    - prettier@3.5.3
+    - ruff@0.9.9
+    - trufflehog@3.88.15
     - yamllint@1.35.1
   ignore:
     - linters:
