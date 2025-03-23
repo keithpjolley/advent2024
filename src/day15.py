@@ -189,6 +189,7 @@ class Day:
             nodes.append(node)
         self._graph.remove_edges_from(list(self._graph.edges))
         direction = 1 if move_up else -1
+        # build hash of locations.
         for n0 in nodes:
             for n1 in nodes:
                 t0, t1 = (n1, n0) if move_up else (n1, n0)
@@ -199,7 +200,6 @@ class Day:
                 if d0["y"] != d1["y"] + direction:
                     # d0/d1 not in adjacent rows
                     continue
-                edge = None
                 if d0["x"] == d1["x"]:
                     self._graph.add_edge(t0, t1)
                 elif "x1" in d0 and d0["x1"] == d1["x"]:
