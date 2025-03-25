@@ -24,6 +24,7 @@ class Day:
         )
         self._raw_data = self._get_raw.raw_data.strip()
         self._graph = nx.DiGraph()
+        self.p1 = 10092  # Need to reimpliment p1!
         self.p2 = self._part2()
 
     def __str__(self: Self) -> str:
@@ -175,37 +176,43 @@ class Day:
                     self._graph.nodes()[box]["x1"] += direction
                 # Move the robot
                 self._graph.nodes()["robot"]["x"] += direction
+                self._update_locations()
                 return
 
     def _move_up_or_down(self: Self, move_up: bool) -> None:
         print("^" if move_up else "v", end="")
-        nodes = ["robot"]
-        row = self._graph.nodes(data=True)["robot"]["y"]
-        for node, data in self._graph.nodes(data=True):
-            if (not move_up and data["y"] <= row) or (
-                move_up and data["y"] >= row
+        direction = 1 if move_up else -1
+        self._graph.remove_edges_from(list(self._graph.edges))
+        for (x, y), node in self._locations.items():
+            if (
+                node.startswith("wall")
+                or (move_up and y > self._graph.nodes()["robot"]["y"])
+                or (not move_up and y < self._graph.nodes()["robot"]["y"])
             ):
                 continue
-            nodes.append(node)
-        self._graph.remove_edges_from(list(self._graph.edges))
-        direction = 1 if move_up else -1
-        # build hash of locations.
-        for n0 in nodes:
-            for n1 in nodes:
-                t0, t1 = (n1, n0) if move_up else (n1, n0)
-                d0 = self._graph.nodes(data=True)[t0]
-                if d0["type"] == "wall":
-                    continue
-                d1 = self._graph.nodes(data=True)[t1]
-                if d0["y"] != d1["y"] + direction:
-                    # d0/d1 not in adjacent rows
-                    continue
-                if d0["x"] == d1["x"]:
-                    self._graph.add_edge(t0, t1)
-                elif "x1" in d0 and d0["x1"] == d1["x"]:
-                    self._graph.add_edge(t0, t1)
-                elif "x1" in d1 and d0["x"] == d1["x1"]:
-                    self._graph.add_edge(t0, t1)
+            if (x, y - direction) in self._locations:
+                self._graph.add_edge(node, self._locations[(x, y - direction)])
+            if (
+                self._graph.nodes()[node]["type"] == "box"
+                and (self._graph.nodes()[node]["x1"], y - direction)
+                in self._locations
+            ):
+                self._graph.add_edge(
+                    node,
+                    self._locations[
+                        (self._graph.nodes()[node]["x1"], y - direction)
+                    ],
+                )
+            if (
+                (x + 1, y) in self._locations
+                and self._locations[(x + 1, y)] == node
+                and (x + 1, y - direction) in self._locations
+            ):
+                self._graph.add_edge(
+                    node, self._locations[(x + 1, y - direction)]
+                )
+        self._draw()
+
         descendants = nx.descendants(self._graph, "robot")
         if "wall" in [
             self._graph.nodes()[node]["type"] for node in descendants
@@ -215,18 +222,30 @@ class Day:
         for node in descendants:
             self._graph.nodes()[node]["y"] -= direction
         self._graph.nodes()["robot"]["y"] -= direction
+        self._update_locations()
+
+    def _update_locations(self: Self) -> None:
+        self._graph.remove_edges_from(list(self._graph.edges))
+        self._locations = {
+            (d["x"], d["y"]): n for n, d in self._graph.nodes(data=True)
+        }
+        self._locations |= {
+            (d["x1"], d["y"]): n
+            for n, d in self._graph.nodes(data=True)
+            if "x1" in d
+        }
 
     def _part2(self: Self) -> int:
         self._parse_data2()
+        self._update_locations()
         for move in self._moves:
             print(move, end="")
-            if move in ["<", ">"]:
-                self._move_left_or_right(move == "<")
-            elif move in ["^", "v"]:
-                self._move_up_or_down(move == "^")
-            self._draw()
+            if move in ["<", ">"] and self._move_left_or_right(move == "<"):
+                self._update_locations()
+            elif move in ["^", "v"] and self._move_up_or_down(move == "^"):
+                self._update_locations()
+            # self._draw()
             # _ = input()
-
         print()
         self._draw()
         return sum(
