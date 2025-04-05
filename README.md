@@ -48,19 +48,19 @@
 
 [Day 21: Keypad Conundrum](https://adventofcode.com/2024/day/21)
 
-[Day 22: Monkey Market](https://adventofcode.com/2024/day/22)
+[Day 22: Monkey Market](https://adventofcode.com/2024/day/22) :star: :star:
 
-[Day 23: LAN Party](https://adventofcode.com/2024/day/23)
+[Day 23: LAN Party](https://adventofcode.com/2024/day/23) :star: :star:
 
-[Day 24: Crossed Wires](https://adventofcode.com/2024/day/24)
+[Day 24: Crossed Wires](https://adventofcode.com/2024/day/24) :star: :star:
 
-[Day 25: Code Chronicle](https://adventofcode.com/2024/day/25)
+[Day 25: Code Chronicle](https://adventofcode.com/2024/day/25) :star:
 
 ---
 
 ## Note to self
 
-I can never remember how to do run `righttyper`.
+I can never remember how to run `righttyper`.
 
 ```bash
 for i in tests/test_*.py;do echo $i;python3 -m righttyper --output-files --overwrite -m pytest $i;done
