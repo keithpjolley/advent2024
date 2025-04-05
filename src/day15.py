@@ -1,5 +1,15 @@
 #!/usr/bin/env python3
 
+"""! Part 1 and 2 of day 15 of Advent of Code 2024.
+
+The two parts are solved very differently. I couldn't figure out
+how to gracefully extend part1 to solve part2. I thought of a
+couple ways that were just too complicated for me to hold in my
+brain all at once so I stewed on it. Then a fully formed solution
+came to me in a dream (true story). It took a few days to translate
+the solution into code. It of course uses NetworkX. :)
+"""
+
 from typing import TYPE_CHECKING, Never, Self
 
 if TYPE_CHECKING:
@@ -22,7 +32,6 @@ class Day:
     VALID_MOVES = {c: i for i, c in enumerate(("<", "^", ">", "v"))}
 
     def __init__(self: Self, args: list[Never]) -> None:
-        self._in_p2 = False
         self._get_raw = GetRawData(
             args, day=os.path.splitext(os.path.basename(__file__))[0]
         )
@@ -41,24 +50,13 @@ class Day:
         return message
 
     def _parse_data(self: Self) -> tuple[list[list[str]], str, list[int]]:
+        """! Part1 data parser."""
         data = self._raw_data
         maze, moves = re.split(r"\n\n", data)
-        if self._in_p2:
-            maze = (
-                maze.replace("#", "##")
-                .replace("O", "⇉⇇")
-                .replace(".", "..")
-                .replace("@", "@.")
-            )
         maze = [
             [row[col] for col in range(1, len(row) - 1)]
             for row in maze.replace(".", "0").replace("O", "1").split("\n")
         ][1:-1]
-
-        if self._in_p2:
-            # Take the edge(s) off.
-            maze = list(map(list, zip(*reversed(maze))))[1:-1]
-            maze = list(map(list, reversed(list(zip(*maze)))))
 
         moves = re.sub(
             r"[^" + "".join(self.VALID_MOVES.keys()) + r"]", "", moves
@@ -73,137 +71,8 @@ class Day:
             [x, y],
         )
 
-    def _move(self: Self) -> None:
-        """! `_move()` always moves the robot one space to the left.
-        The map is rotated prior to calling `_move()` to make this
-        "the right move."
-        """
-        row = self._maze[self._loc[1]][: self._loc[0]]
-        if len(row) == 0 or row[-1] == "#":
-            # Up against a wall. Can't move.
-            return
-        if row[-1] == "0":
-            # No box to move, no wall. Just move "left" and go.
-            self._maze[self._loc[1]][self._loc[0]] = "0"
-            self._loc[0] -= 1
-            return
-        try:
-            # Find the rightmost wall in this row.
-            wall = len(row) - list(reversed(row)).index("#")
-            row = row[wall:]
-        except ValueError:
-            pass
-        if "0" not in row:
-            # No empty space to move to.
-            return
-        first_space = len(row) - list(reversed(row[:-1])).index("0") - 2
-        self._maze[self._loc[1]][self._loc[0] - len(row) + first_space] = "1"
-        self._maze[self._loc[1]][self._loc[0]] = "0"
-        self._loc[0] -= 1
-
-    def _p2rotate(self: Self, rotation: int) -> None:
-        def swapper(*swaps: tuple[str, str]) -> None:
-            # Swap old_x for new_x
-            ret_swaps = (("u", "⇈"), ("l", "⇇"), ("d", "⇊"), ("r", "⇉"))
-            for ov, nv in swaps + ret_swaps:
-                self._maze = [
-                    [nv if c == ov else c for c in r] for r in self._maze
-                ]
-
-        # Have to use intermediate values.
-        # a -> tmp, b -> a, tmp -> b.
-        match rotation:
-            case 0 | 360:
-                pass
-            case 90:
-                swapper(("⇉", "d"), ("⇊", "l"), ("⇈", "r"), ("⇇", "u"))
-            case 180:
-                swapper(("⇊", "u"), ("⇉", "l"), ("⇈", "d"), ("⇇", "r"))
-            case 270:
-                swapper(("⇉", "u"), ("⇊", "r"), ("⇈", "l"), ("⇇", "d"))
-            case _:
-                raise ValueError(f"Unsupported rotation: {rotation}.")
-
-    def _rotate(self: Self, direction: int) -> None:
-
-        while direction < 0:
-            direction += 360
-        while direction >= 360:
-            direction -= 360
-
-        if direction == 0:
-            return
-
-        width, height = len(self._maze[0]) - 1, len(self._maze) - 1
-        x, y = self._loc
-        if self._in_p2:
-            self._p2rotate(direction)
-
-        match direction:
-            case 90:
-                self._maze = list(map(list, zip(*reversed(self._maze))))
-                self._loc = [height - y, x]
-                self._orientation += 1
-            case 270:
-                self._maze = list(map(list, reversed(list(zip(*self._maze)))))
-                self._loc = [y, width - x]
-                self._orientation -= 1
-            case 180:
-                for i in range(len(self._maze)):
-                    self._maze[i] = list(reversed(self._maze[i]))
-                self._maze = list(reversed(self._maze))
-                self._loc = [width - x, height - y]
-                self._orientation += 2
-            case _:
-                # For 0 or 360 degree rotation.
-                pass
-
-    def _print(self: Self) -> None:
-        for j, row in enumerate(self._maze):
-            for i, char in enumerate(row):
-                if [i, j] == self._loc:
-                    fmt = f"{1};{33};{40}"
-                    char = "@"
-                elif char == "0":
-                    fmt = "1;30"
-                    char = "."
-                elif char == "#":
-                    fmt = "0;31"
-                elif char == "1":
-                    char = "O"
-                    fmt = "0;37"
-                else:
-                    fmt = "0;32"
-                print(f"\x1b[{fmt};40m{char}\x1b[0m", end="")
-            if j == 0:
-                print(
-                    f"  loc: {self._loc}, orientation: {self._orientation}",
-                    end="",
-                )
-            print()
-
-    def _part1(self: Self) -> int:
-        last_move = "<"
-        for move in self._moves:
-            self._rotate(
-                -90 * (self.VALID_MOVES[move] - self.VALID_MOVES[last_move])
-            )
-            self._move()
-            last_move = move
-        # Return the maze to the upright and locked position.
-        # Done like this because a) all lines get tested. b) only
-        # happens once.
-        while (self._orientation % 4) != 0:
-            self._rotate(90)
-        self._orientation = 0
-        return sum(
-            100 * (i + 1) + 1 + j
-            for i, row in enumerate(self._maze)
-            for j, col in enumerate(row)
-            if col == "1"
-        )
-
     def _parse_data2(self: Self) -> None:
+        """! Part2 data parser. Like I said, p1 and p2 are different."""
         data = (
             self._raw_data.replace("#", "##")
             .replace("O", "<>")
@@ -228,7 +97,96 @@ class Day:
                 if col == "@":
                     self._graph.add_node("robot", type="robot", x=i, y=j)
 
-    def _draw(self: Self) -> None:
+    def _move(self: Self) -> None:
+        """! `_move()` always moves the robot one space to the left.
+        The map is rotated prior to calling `_move()` to make this
+        "the right move" every time.
+
+        Part 1 solution.
+
+        """
+        row = self._maze[self._loc[1]][: self._loc[0]]
+        if len(row) == 0 or row[-1] == "#":
+            # Up against a wall. Can't move.
+            return
+        if row[-1] == "0":
+            # No box to move, no wall. Just move "left" and go.
+            self._maze[self._loc[1]][self._loc[0]] = "0"
+            self._loc[0] -= 1
+            return
+        try:
+            # Find the rightmost wall in this row.
+            wall = len(row) - list(reversed(row)).index("#")
+            row = row[wall:]
+        except ValueError:
+            pass
+        if "0" not in row:
+            # No empty space to move to.
+            return
+        first_space = len(row) - list(reversed(row[:-1])).index("0") - 2
+        self._maze[self._loc[1]][self._loc[0] - len(row) + first_space] = "1"
+        self._maze[self._loc[1]][self._loc[0]] = "0"
+        self._loc[0] -= 1
+
+    def _rotate(self: Self, direction: int) -> None:
+
+        while direction < 0:
+            direction += 360
+        while direction >= 360:
+            direction -= 360
+
+        if direction == 0:
+            return
+
+        width, height = len(self._maze[0]) - 1, len(self._maze) - 1
+        x, y = self._loc
+
+        match direction:
+            case 90:
+                self._maze = list(map(list, zip(*reversed(self._maze))))
+                self._loc = [height - y, x]
+                self._orientation += 1
+            case 270:
+                self._maze = list(map(list, reversed(list(zip(*self._maze)))))
+                self._loc = [y, width - x]
+                self._orientation -= 1
+            case 180:
+                for i in range(len(self._maze)):
+                    self._maze[i] = list(reversed(self._maze[i]))
+                self._maze = list(reversed(self._maze))
+                self._loc = [width - x, height - y]
+                self._orientation += 2
+            case _:
+                # For 0 or 360 degree rotation. Should never get here.
+                pass
+
+    def _print(self: Self) -> None:  # pragma: no cover
+        """! This prints the maze to stdout."""
+        for j, row in enumerate(self._maze):
+            for i, char in enumerate(row):
+                if [i, j] == self._loc:
+                    fmt = f"{1};{33};{40}"
+                    char = "@"
+                elif char == "0":
+                    fmt = "1;30"
+                    char = "."
+                elif char == "#":
+                    fmt = "0;31"
+                elif char == "1":
+                    char = "O"
+                    fmt = "0;37"
+                else:
+                    fmt = "0;32"
+                print(f"\x1b[{fmt};40m{char}\x1b[0m", end="")
+            if j == 0:
+                print(
+                    f"  loc: {self._loc}, orientation: {self._orientation}",
+                    end="",
+                )
+            print()
+
+    def _draw(self: Self) -> None:  # pragma: no cover
+        """! This uses NetworkX/matplotlib to draw the maze."""
         boxes = nx.Graph()
         robot = nx.Graph()
         walls = nx.Graph()
@@ -293,7 +251,7 @@ class Day:
         )
 
     def _move_left_or_right(self: Self, move_left: bool) -> None:
-        """! No graph theory here kids. :/"""
+        """! Part 2 solution. No graph theory here kids. :/"""
         col, row = (
             self._graph.nodes()["robot"]["x"],
             self._graph.nodes()["robot"]["y"],
@@ -348,6 +306,7 @@ class Day:
                 return
 
     def _move_up_or_down(self: Self, move_up: bool) -> None:
+        """! Part 2 solution. Graph theory goes here."""
         direction = 1 if move_up else -1
         self._graph.remove_edges_from(list(self._graph.edges))
         for (x, y), node in self._locations.items():
@@ -391,6 +350,7 @@ class Day:
         self._update_locations()
 
     def _update_locations(self: Self) -> None:
+        """! Part 2 solution. Update the locations of the field."""
         self._graph.remove_edges_from(list(self._graph.edges))
         self._locations = {
             (d["x"], d["y"]): n for n, d in self._graph.nodes(data=True)
@@ -401,28 +361,36 @@ class Day:
             if "x1" in d
         }
 
+    def _part1(self: Self) -> int:
+        last_move = "<"
+        for move in self._moves:
+            self._rotate(
+                -90 * (self.VALID_MOVES[move] - self.VALID_MOVES[last_move])
+            )
+            self._move()
+            last_move = move
+        # Return the maze to the upright and locked position.
+        # Done like this because a) all lines get tested. b) only
+        # happens once.
+        while (self._orientation % 4) != 0:
+            self._rotate(90)
+        self._orientation = 0
+        return sum(
+            100 * (i + 1) + 1 + j
+            for i, row in enumerate(self._maze)
+            for j, col in enumerate(row)
+            if col == "1"
+        )
+
     def _part2(self: Self) -> int:
-        # begin = timer()
         self._parse_data2()
         self._update_locations()
-        # n = 1
         for move in self._moves:
-            # print(
-            #     f"{move} - {n:5d} of {len(self._moves)}, {(n/len(self._moves)):7.2%}",
-            #     end="",
-            # )
-            # start = timer()
             if (
                 move in ["<", ">"] and self._move_left_or_right(move == "<")
             ) or (move in ["^", "v"] and self._move_up_or_down(move == "^")):
                 self._update_locations()
-            # end = timer()
-            # print(
-            #     f", step: {end - start:.5f}s, total: {end - begin:.2f}s",
-            #     flush=True,
-            # )
-            # n += 1
-        self._draw()
+        # self._draw()
         return sum(
             [
                 100 * d["y"] + d["x"] + 1
