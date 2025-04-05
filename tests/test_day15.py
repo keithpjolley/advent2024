@@ -32,7 +32,7 @@ class TestDay(unittest.TestCase):
         self.assertEqual(test._raw_data, self.test_data)
 
     def test_parts(self: Self) -> None:
-        tests = [(10092, 0, self.test_input)]
+        tests = [(10092, 9021, self.test_input)]
         # No use using up github action minutes for this.
         # tests.append((0, 0, []))
         for p1, p2, test in tests:

@@ -34,7 +34,7 @@
 
 [Day 14: Restroom Redoubt](https://adventofcode.com/2024/day/14) :star: :star:
 
-[Day 15: Warehouse Woes](https://adventofcode.com/2024/day/15) :star:
+[Day 15: Warehouse Woes](https://adventofcode.com/2024/day/15) :star: :star:
 
 [Day 16: Reindeer Maze](https://adventofcode.com/2024/day/16) :star: :star:
 
